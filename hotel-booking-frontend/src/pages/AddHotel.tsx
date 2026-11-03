@@ -24,12 +24,46 @@ const AddHotel = () => {
         navigate("/my-hotels");
       }, 1500);
     },
-    onError: () => {
-      showToast({
-        title: "Failed to Add Hotel",
-        description: "There was an error saving your hotel. Please try again.",
-        type: "ERROR",
-      });
+    onError: (error: unknown) => {
+      const err = error as {
+        response?: {
+          status?: number;
+          data?: { message?: string };
+        };
+        message?: string;
+      };
+      const status = err.response?.status;
+      const responseMsg = err.response?.data?.message || err.message || "";
+
+      if (status === 403) {
+        showToast({
+          title: "Access Denied (403)",
+          description:
+            "Your account does not have permission to create hotels. Verified Hotel Owner or Admin privileges are required.",
+          type: "ERROR",
+        });
+      } else if (
+        status === 500 &&
+        (responseMsg.toLowerCase().includes("cloudinary") ||
+          responseMsg.toLowerCase().includes("image") ||
+          responseMsg.toLowerCase().includes("upload"))
+      ) {
+        showToast({
+          title: "Cloudinary Upload Failure",
+          description:
+            responseMsg ||
+            "Failed to upload hotel images to Cloudinary. Please verify Cloudinary configuration and network connectivity.",
+          type: "ERROR",
+        });
+      } else {
+        showToast({
+          title: "Failed to Add Hotel",
+          description:
+            responseMsg ||
+            "There was an error saving your hotel. Please verify form details and try again.",
+          type: "ERROR",
+        });
+      }
     },
   });
 

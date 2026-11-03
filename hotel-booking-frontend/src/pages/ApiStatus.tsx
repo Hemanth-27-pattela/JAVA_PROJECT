@@ -11,6 +11,7 @@ import {
   XCircle,
 } from "lucide-react";
 import useAppContext from "../hooks/useAppContext";
+import * as apiClient from "../api-client";
 
 /** Public liveness shape from GET /api/health (minimal — no infra recon data) */
 interface HealthData {
@@ -41,6 +42,15 @@ interface DetailedHealthData {
 const ApiStatus = () => {
   const [isDetailed, setIsDetailed] = useState(false);
   const { isLoggedIn } = useAppContext();
+
+  const { data: currentUser } = useQuery(
+    "fetchCurrentUser",
+    apiClient.fetchCurrentUser,
+    { enabled: isLoggedIn },
+  );
+
+  const role = currentUser?.role ? currentUser.role.toLowerCase() : "";
+  const isAdmin = role === "admin";
   const apiBaseUrl =
     import.meta.env.VITE_API_BASE_URL || "http://localhost:5001";
 
@@ -86,8 +96,8 @@ const ApiStatus = () => {
       return response.json();
     },
     {
-      enabled: isDetailed && isLoggedIn,
-      refetchInterval: isDetailed && isLoggedIn ? 30000 : false,
+      enabled: isDetailed && isLoggedIn && isAdmin,
+      refetchInterval: isDetailed && isLoggedIn && isAdmin ? 30000 : false,
       retry: false,
     },
   );
@@ -192,12 +202,14 @@ const ApiStatus = () => {
             </h2>
           </div>
           <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setIsDetailed(!isDetailed)}
-              className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-            >
-              {isDetailed ? "Hide Details" : "Show Details"}
-            </button>
+            {isAdmin && (
+              <button
+                onClick={() => setIsDetailed(!isDetailed)}
+                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              >
+                {isDetailed ? "Hide Details" : "Show Details"}
+              </button>
+            )}
             <button
               onClick={() => refetch()}
               className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors"
@@ -256,7 +268,7 @@ const ApiStatus = () => {
         </div>
       </div>
 
-      {needsSignInForDetails && (
+      {needsSignInForDetails && isAdmin && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 pb-6 text-center">
           <AlertCircle className="w-8 h-8 text-amber-600 mx-auto mb-2" />
           <p className="text-amber-900 font-medium">
@@ -269,7 +281,7 @@ const ApiStatus = () => {
         </div>
       )}
 
-      {isDetailed && detailedData && (
+      {isDetailed && isAdmin && detailedData && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-6">
           <div className="bg-white rounded-xl shadow-xl border p-6">
             <h3 className="text-lg font-medium text-gray-700 mb-4 flex items-center">
@@ -321,7 +333,7 @@ const ApiStatus = () => {
         </div>
       )}
 
-      {isDetailed && detailedData && (
+      {isDetailed && isAdmin && detailedData && (
         <div className="bg-white rounded-xl shadow-xl border p-6 pb-6">
           <h3 className="text-lg font-medium text-gray-700 mb-4 flex items-center">
             <Activity className="w-5 h-5 text-purple-600 " />

@@ -273,7 +273,7 @@ export const createHotelReview = async (payload: {
 
 // Business Insights API functions (public endpoints - no auth required)
 export const fetchBusinessInsightsDashboard = async () => {
-  const response = await axiosInstance.get("/api/business-insights/dashboard/public");
+  const response = await axiosInstance.get("/api/business-insights/dashboard");
   return response.data;
 };
 
@@ -284,13 +284,13 @@ export const fetchAdminBusinessInsightsDashboard = async () => {
 };
 
 export const fetchBusinessInsightsForecast = async () => {
-  const response = await axiosInstance.get("/api/business-insights/forecast/public");
+  const response = await axiosInstance.get("/api/business-insights/forecast");
   return response.data;
 };
 
 /** Public/auth ops figures (system-stats) — avoids /performance in the URL */
 export const fetchBusinessInsightsSystemStats = async () => {
-  const response = await axiosInstance.get("/api/business-insights/system-stats/public");
+  const response = await axiosInstance.get("/api/business-insights/system-stats");
   return response.data;
 };
 
@@ -403,5 +403,112 @@ export const suggestAiAssist = async (payload: {
   warning?: string;
 }> => {
   const response = await axiosInstance.post("/api/ai/suggest", payload);
+  return response.data;
+};
+
+
+// ==========================================
+// HOTEL OWNER ACCESS REQUEST WORKFLOW (RBAC)
+// ==========================================
+
+export type OwnerRequestType = {
+  id: string;
+  userId: string;
+  userEmail: string;
+  userName: string;
+  businessName: string;
+  businessEmail: string;
+  businessPhone?: string;
+  businessAddress?: string;
+  justification?: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  reviewedBy?: string;
+  reviewedByEmail?: string;
+  reviewedAt?: string;
+  reviewNotes?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CreateOwnerRequestData = {
+  businessName: string;
+  businessEmail: string;
+  businessPhone?: string;
+  businessAddress?: string;
+  justification?: string;
+};
+
+export type ReviewOwnerRequestData = {
+  reviewNotes?: string;
+};
+
+/** Guest: submit request to become a Hotel Owner */
+export const submitOwnerRequest = async (
+  formData: CreateOwnerRequestData
+): Promise<OwnerRequestType> => {
+  const response = await axiosInstance.post("/api/owner-requests", formData);
+  return response.data;
+};
+
+/** Guest/User: fetch all own submitted requests */
+export const fetchMyOwnerRequests = async (): Promise<OwnerRequestType[]> => {
+  const response = await axiosInstance.get("/api/owner-requests/my");
+  return response.data;
+};
+
+/** Guest/User: fetch current pending request if one exists */
+export const fetchMyPendingOwnerRequest = async (): Promise<OwnerRequestType | null> => {
+  try {
+    const response = await axiosInstance.get("/api/owner-requests/my/pending");
+    return response.data;
+  } catch (error: unknown) {
+    const status = (error as { response?: { status?: number } })?.response?.status;
+    if (status === 204 || status === 404) {
+      return null;
+    }
+    throw error;
+  }
+};
+
+/** Admin: fetch all owner requests (optionally filtered by status) */
+export const fetchAdminOwnerRequests = async (
+  status?: string
+): Promise<OwnerRequestType[]> => {
+  const params = status && status !== "ALL" ? { status } : {};
+  const response = await axiosInstance.get("/api/owner-requests/admin", { params });
+  return response.data;
+};
+
+/** Admin: approve an owner request and promote user to HOTEL_OWNER */
+export const approveOwnerRequest = async (
+  id: string,
+  data?: ReviewOwnerRequestData
+): Promise<OwnerRequestType> => {
+  const response = await axiosInstance.post(
+    `/api/owner-requests/admin/${id}/approve`,
+    data || {}
+  );
+  return response.data;
+};
+
+/** Admin: reject an owner request */
+export const rejectOwnerRequest = async (
+  id: string,
+  data?: ReviewOwnerRequestData
+): Promise<OwnerRequestType> => {
+  const response = await axiosInstance.post(
+    `/api/owner-requests/admin/${id}/reject`,
+    data || {}
+  );
+  return response.data;
+};
+
+/** Refresh JWT token to pick up new database role claim without re-login */
+export const refreshToken = async (): Promise<{ token: string; userId: string; role: string }> => {
+  const response = await axiosInstance.post("/api/auth/refresh-token");
+  const newToken = response.data?.token;
+  if (newToken) {
+    localStorage.setItem("session_id", newToken);
+  }
   return response.data;
 };

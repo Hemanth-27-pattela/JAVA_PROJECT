@@ -71,6 +71,10 @@ const UsernameMenu = () => {
     navigate("/");
   };
 
+  const role = currentUser?.role ? currentUser.role.toLowerCase() : "";
+  const isAdmin = role === "admin";
+  const isOwnerOrAdmin = role === "hotel_owner" || role === "admin";
+
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen} modal={false}>
       <DropdownMenuTrigger asChild>
@@ -88,61 +92,85 @@ const UsernameMenu = () => {
         <div className="px-2 py-1">
           <p className="text-sm font-normal text-gray-700">{name || "User"}</p>
           <p className="text-xs text-muted-foreground truncate">{email}</p>
+          {role && (
+            <span className="inline-block mt-1 px-1.5 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded bg-slate-100 text-slate-600">
+              {role.replace("_", " ")}
+            </span>
+          )}
         </div>
         <Separator className="my-2 bg-gray-200" />
-        {currentUser?.role === "admin" && (
+        {isAdmin && (
           <DropdownMenuItem
             onClick={handleMenuClick}
             asChild
             className={menuItemClass}
           >
             <Link to="/admin" className={linkRowClass}>
-              <Shield className="h-4 w-4" />
+              <Shield className="h-4 w-4 text-primary-600" />
               Admin Panel
             </Link>
           </DropdownMenuItem>
         )}
-        <DropdownMenuItem
-          onClick={handleMenuClick}
-          asChild
-          className={menuItemClass}
-        >
-          <Link to="/add-hotel" className={linkRowClass}>
-            <Plus className="h-4 w-4" />
-            Add Hotel
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={handleMenuClick}
-          asChild
-          className={menuItemClass}
-        >
-          <Link to="/my-hotels" className={linkRowClass}>
-            <Building2 className="h-4 w-4" />
-            My Hotels
-          </Link>
-        </DropdownMenuItem>
-        {/* API links moved from MainNav — logged-in profile only */}
-        <DropdownMenuItem
-          onClick={handleMenuClick}
-          asChild
-          className={menuItemClass}
-        >
-          <Link to="/api-docs" className={linkRowClass}>
-            <FileText className="h-4 w-4" />
-            API Documentation
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={handleMenuClick}
-          asChild
-          className={menuItemClass}
-        >
-          <Link to="/api-status" className={linkRowClass}>
-            <Activity className="h-4 w-4" />
-            API Status
-          </Link>
-        </DropdownMenuItem>
+        {isOwnerOrAdmin ? (
+          <>
+            <DropdownMenuItem
+              onClick={handleMenuClick}
+              asChild
+              className={menuItemClass}
+            >
+              <Link to="/add-hotel" className={linkRowClass}>
+                <Plus className="h-4 w-4" />
+                Add Hotel
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={handleMenuClick}
+              asChild
+              className={menuItemClass}
+            >
+              <Link to="/my-hotels" className={linkRowClass}>
+                <Building2 className="h-4 w-4" />
+                My Hotels
+              </Link>
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <DropdownMenuItem
+            onClick={handleMenuClick}
+            asChild
+            className={menuItemClass}
+          >
+            <Link to="/request-owner-access" className={linkRowClass}>
+              <Building2 className="h-4 w-4 text-primary-600" />
+              Become a Hotel Owner
+            </Link>
+          </DropdownMenuItem>
+        )}
+        {/* API links visible to ADMIN only */}
+        {isAdmin && (
+          <>
+            <DropdownMenuItem
+              onClick={handleMenuClick}
+              asChild
+              className={menuItemClass}
+            >
+              <Link to="/api-docs" className={linkRowClass}>
+                <FileText className="h-4 w-4" />
+                API Documentation
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={handleMenuClick}
+              asChild
+              className={menuItemClass}
+            >
+              <Link to="/api-status" className={linkRowClass}>
+                <Activity className="h-4 w-4" />
+                API Status
+              </Link>
+            </DropdownMenuItem>
+          </>
+        )}
         <Separator className="my-2 bg-gray-200" />
         <DropdownMenuItem
           onSelect={(e) => {

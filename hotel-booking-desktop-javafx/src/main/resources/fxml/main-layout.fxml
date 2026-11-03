@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="800.0" prefWidth="1280.0" styleClass="main-app-shell" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hotel.desktop.controller.MainLayoutController">
+
+    <!-- Top Header Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="app-header-bar" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="14.0" left="24.0" right="24.0" top="14.0" />
+            </padding>
+            <children>
+                <!-- Brand Title -->
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <children>
+                        <Label styleClass="header-logo-icon" text="🏨" />
+                        <VBox spacing="2.0">
+                            <children>
+                                <Label styleClass="header-brand-title" text="HOTEL BOOKING SYSTEM" />
+                                <Label styleClass="header-brand-subtitle" text="Desktop Edition • Spring Boot REST Client" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                <!-- Center Spacer -->
+                <Region HBox.hgrow="ALWAYS" />
+
+                <!-- User & Session Controls -->
+                <HBox alignment="CENTER_RIGHT" spacing="16.0">
+                    <children>
+                        <!-- Backend Status Indicator -->
+                        <HBox alignment="CENTER" spacing="6.0" styleClass="status-pill-backend">
+                            <children>
+                                <Label styleClass="status-dot-active" text="●" />
+                                <Label fx:id="connectionStatusLabel" styleClass="status-pill-text" text="Connected (Port 5001)" />
+                            </children>
+                        </HBox>
+
+                        <Separator orientation="VERTICAL" />
+
+                        <!-- User Profile Information -->
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <Label styleClass="user-avatar-circle" text="👤" />
+                                <VBox spacing="1.0">
+                                    <children>
+                                        <Label fx:id="userNameLabel" styleClass="header-user-name" text="User Name" />
+                                        <Label fx:id="userEmailLabel" styleClass="header-user-email" text="user@hotel.com" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <!-- Role Badge -->
+                        <Label fx:id="roleBadgeLabel" styleClass="role-badge, role-badge-guest" text="GUEST" />
+
+                        <Separator orientation="VERTICAL" />
+
+                        <!-- Logout Button -->
+                        <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="btn-signout" text="Sign Out" />
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- Left Sidebar -->
+    <left>
+        <VBox maxWidth="260.0" minWidth="260.0" prefWidth="260.0" styleClass="app-sidebar" BorderPane.alignment="CENTER">
+            <children>
+                <!-- Sidebar Section Header -->
+                <VBox spacing="4.0" styleClass="sidebar-header-box">
+                    <padding>
+                        <Insets bottom="16.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                    <children>
+                        <Label styleClass="sidebar-section-title" text="NAVIGATION" />
+                        <Label fx:id="sidebarRoleLabel" styleClass="sidebar-portal-badge" text="GUEST PORTAL" />
+                    </children>
+                </VBox>
+
+                <Separator styleClass="sidebar-separator" />
+
+                <!-- Navigation Items Container -->
+                <ScrollPane fitToWidth="true" styleClass="sidebar-scroll-pane" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox fx:id="navigationContainer" spacing="4.0" styleClass="sidebar-nav-container">
+                            <padding>
+                                <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+                            </padding>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+
+                <Separator styleClass="sidebar-separator" />
+
+                <!-- Sidebar Footer Session Card -->
+                <VBox spacing="4.0" styleClass="sidebar-footer-box">
+                    <padding>
+                        <Insets bottom="16.0" left="20.0" right="20.0" top="16.0" />
+                    </padding>
+                    <children>
+                        <Label styleClass="sidebar-footer-label" text="AUTHENTICATED PRINCIPAL" />
+                        <Label fx:id="sidebarFooterUserName" styleClass="sidebar-footer-name" text="Current User" />
+                        <Label fx:id="sidebarFooterRole" styleClass="sidebar-footer-sub" text="Role: Guest" />
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </left>
+
+    <!-- Center Content Viewport -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="main-content-viewport" BorderPane.alignment="CENTER">
+            <!-- Dynamic pages will be placed here -->
+        </StackPane>
+    </center>
+
+    <!-- Bottom Status Bar -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="app-status-bar" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="8.0" left="24.0" right="24.0" top="8.0" />
+            </padding>
+            <children>
+                <Label fx:id="statusMessageLabel" styleClass="status-bar-text" text="Ready" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="activePageLabel" styleClass="status-bar-text" text="Current: Home" />
+                <Separator orientation="VERTICAL" />
+                <Label styleClass="status-bar-text, status-bar-muted" text="Hotel Booking Desktop Client • Phase 9.4" />
+            </children>
+        </HBox>
+    </bottom>
+
+</BorderPane>
+

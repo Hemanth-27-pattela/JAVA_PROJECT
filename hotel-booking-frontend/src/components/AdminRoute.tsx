@@ -29,7 +29,8 @@ const AdminRoute = ({ children }: Props) => {
     );
   }
 
-  if (user?.role !== "admin") {
+  const role = user?.role ? user.role.toLowerCase() : "";
+  if (role !== "admin") {
     return <Navigate to="/" replace />;
   }
 

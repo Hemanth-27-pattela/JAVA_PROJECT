@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
 import { useQueryWithLoading } from "../hooks/useLoadingHooks";
 import {
   fetchBusinessInsightsDashboard,
   fetchBusinessInsightsForecast,
   fetchBusinessInsightsSystemStats,
+  fetchCurrentUser,
 } from "../api-client";
 import {
   BarChart,
@@ -32,6 +34,7 @@ import {
   DollarSign,
   Activity,
   BarChart3,
+  Plus,
   RefreshCw,
   Server,
   Clock,
@@ -174,6 +177,21 @@ const AnalyticsDashboard = () => {
   const [activeTab, setActiveTab] = useState<TabId>("overview");
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  const { data: currentUser } = useQuery(
+    "fetchCurrentUser",
+    fetchCurrentUser
+  );
+  const role = currentUser?.role ? currentUser.role.toLowerCase() : "";
+  const isAdmin = role === "admin";
+  const isHotelOwner = role === "hotel_owner";
+
+  const pageTitle = isAdmin
+    ? "Platform Business Insights"
+    : "My Hotels Performance";
+  const pageSubtitle = isAdmin
+    ? "Global platform-wide booking, revenue, and performance metrics"
+    : "Business insights and performance metrics for your hotel properties";
+
   const {
     data: analyticsData,
     isLoading,
@@ -298,10 +316,10 @@ const AnalyticsDashboard = () => {
           </div>
           <div className="min-w-0 flex flex-col justify-center">
             <h1 className="text-lg md:text-2xl font-medium text-gray-700 leading-tight">
-              Business Insights Dashboard
+              {pageTitle}
             </h1>
             <p className="text-gray-600 text-sm font-normal ">
-              Comprehensive insights into your hotel booking business
+              {pageSubtitle}
             </p>
           </div>
         </div>
@@ -342,6 +360,36 @@ const AnalyticsDashboard = () => {
           })}
         </nav>
       </div>
+
+      {/* Empty state when owner or platform has 0 hotels */}
+      {ov && ov.totalHotels === 0 && (
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-8 text-center space-y-4 mb-6 shadow-sm">
+          <div className="mx-auto w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+            <Building className="w-7 h-7" />
+          </div>
+          <div className="max-w-md mx-auto space-y-2">
+            <h3 className="text-lg font-semibold text-gray-900">
+              No Hotels Listed Yet
+            </h3>
+            <p className="text-sm text-gray-600">
+              {isHotelOwner
+                ? "You haven't added any hotel properties yet. Add your first hotel to start receiving bookings and viewing performance analytics."
+                : "There are currently no hotels registered on the platform."}
+            </p>
+          </div>
+          {isHotelOwner && (
+            <div className="pt-2">
+              <Link
+                to="/add-hotel"
+                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium text-sm rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Your First Hotel
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
 
       {error && activeTab === "overview" && !analyticsData && (
         <div className="bg-white rounded-xl shadow-xl border p-6 text-center">

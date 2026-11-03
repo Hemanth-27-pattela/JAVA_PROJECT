@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" styleClass="content-scroll-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hotel.desktop.controller.PlaceholderPageController">
+    <content>
+        <VBox spacing="24.0" styleClass="page-container">
+            <padding>
+                <Insets bottom="32.0" left="36.0" right="36.0" top="32.0" />
+            </padding>
+            <children>
+                <!-- Hero Header Card -->
+                <VBox spacing="12.0" styleClass="dashboard-card">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="16.0">
+                            <children>
+                                <Label fx:id="pageIconLabel" styleClass="page-icon" text="🏠" />
+                                <VBox spacing="4.0">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                                            <children>
+                                                <Label fx:id="pageTitleLabel" styleClass="page-heading" text="Page Title" />
+                                                <Label fx:id="targetRoleBadge" styleClass="role-badge, role-badge-guest" text="GUEST" />
+                                            </children>
+                                        </HBox>
+                                        <Label fx:id="pageSubtitleLabel" styleClass="page-subheading" text="Subheading and section overview" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+
+                <!-- Module Overview Card -->
+                <VBox spacing="16.0" styleClass="dashboard-card">
+                    <children>
+                        <Label styleClass="card-title" text="Module Overview" />
+                        <Separator />
+                        <Label fx:id="pageDescriptionLabel" styleClass="page-body-text" text="Detailed functional description for this application section." wrapText="true" />
+                        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="info-banner">
+                            <children>
+                                <Label styleClass="info-banner-icon" text="ℹ" />
+                                <Label fx:id="phaseNoticeLabel" styleClass="info-banner-text" text="Phase 9.4 Architectural Shell: Full functional implementation will follow in subsequent phases." wrapText="true" HBox.hgrow="ALWAYS" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+
+                <!-- Technical & Security Context Card -->
+                <VBox spacing="16.0" styleClass="dashboard-card">
+                    <children>
+                        <Label styleClass="card-title" text="Security &amp; Session Context" />
+                        <Separator />
+                        <VBox spacing="10.0" styleClass="session-info-grid">
+                            <children>
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label styleClass="session-label" text="Access Policy:" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label fx:id="roleContextLabel" styleClass="session-value" text="Permitted Roles: ..." />
+                                    </children>
+                                </HBox>
+                                <Separator />
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label styleClass="session-label" text="Current Principal:" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label fx:id="userContextLabel" styleClass="session-value" text="Active User: ..." />
+                                    </children>
+                                </HBox>
+                                <Separator />
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label styleClass="session-label" text="JWT Token Status:" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label fx:id="sessionStatusLabel" styleClass="session-value, session-token-active" text="Valid Bearer JWT in memory" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>
+

@@ -7,10 +7,12 @@ import {
   Calendar,
   Activity,
   ArrowLeft,
+  UserCheck,
 } from "lucide-react";
 
 const nav = [
   { to: "/admin", end: true, label: "Dashboard", icon: LayoutDashboard },
+  { to: "/admin/owner-requests", label: "Owner Requests", icon: UserCheck },
   { to: "/admin/hotels", label: "Hotels", icon: Building2 },
   { to: "/admin/users", label: "Users", icon: Users },
   { to: "/admin/reviews", label: "Reviews", icon: Star },

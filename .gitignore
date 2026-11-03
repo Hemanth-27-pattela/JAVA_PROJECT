@@ -33,3 +33,9 @@ node_modules
 
 HETZNER_VPS_MIGRATION_GUIDE.md
 SUBDOMAIN_ARNOBMAHMUD_SETUP.md
+
+# Maven & Build artifacts
+target/
+**/target/
+*.class
+.mvn/wrapper/maven-wrapper.jar

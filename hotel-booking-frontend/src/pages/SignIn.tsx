@@ -33,14 +33,34 @@ export type SignInFormData = {
   password: string;
 };
 
-/** Matches seed.ts: test@user.com → Test Admin (role=admin) */
-const testAccounts = {
-  "test-admin": {
-    email: "test@user.com",
-    password: "12345678",
-    name: "Test Admin",
-  },
-};
+/** Development-only seeded demo accounts */
+const devTestAccounts: Record<
+  string,
+  { email: string; password: string; name: string }
+> = import.meta.env.DEV
+  ? {
+      admin: {
+        email: "admin@hotel.com",
+        password: "12345678",
+        name: "Demo Admin (admin@hotel.com)",
+      },
+      owner: {
+        email: "owner@hotel.com",
+        password: "12345678",
+        name: "Demo Hotel Owner (owner@hotel.com)",
+      },
+      guest: {
+        email: "guest@hotel.com",
+        password: "12345678",
+        name: "Demo Guest (guest@hotel.com)",
+      },
+      "test-admin": {
+        email: "test@user.com",
+        password: "12345678",
+        name: "Legacy Test Admin (test@user.com)",
+      },
+    }
+  : {};
 
 /** Same Robohash set1 as UsernameMenu — circle ring + Name · email row */
 const testAccountAvatar = (email: string) =>
@@ -76,6 +96,7 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState<string>("");
+  const isGoogleAuthEnabled = import.meta.env.VITE_ENABLE_GOOGLE_AUTH === "true";
 
   const location = useLocation();
 
@@ -93,7 +114,7 @@ const SignIn = () => {
       setValue("password", "");
     } else {
       setSelectedRole(value);
-      const account = testAccounts[value as keyof typeof testAccounts];
+      const account = devTestAccounts[value];
       if (account) {
         setValue("email", account.email);
         setValue("password", account.password);
@@ -143,7 +164,7 @@ const SignIn = () => {
                   Sign in to your account to continue
                 </CardDescription>
 
-                {!import.meta.env.PROD && (
+                {import.meta.env.DEV && (
                   <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
                     <p className="text-sm text-yellow-800">
                       <span className="font-medium text-gray-700">
@@ -160,63 +181,57 @@ const SignIn = () => {
 
             <CardContent className="space-y-6">
               <form className="space-y-6" onSubmit={onSubmit}>
-                <StaggerItem index={2} className="space-y-2">
-                  <Label
-                    htmlFor="test-account"
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Test Accounts To Login With
-                  </Label>
-                  <Select
-                    key={`select-${selectedRole || "empty"}`}
-                    value={selectedRole || undefined}
-                    onValueChange={handleRoleSelect}
-                  >
-                    <SelectTrigger className="border border-gray-300 bg-white/80 text-gray-700 [&>span]:inline-flex [&>span]:items-center [&>span]:gap-2 [&>span]:truncate">
-                      {selectedRole &&
-                      testAccounts[
-                        selectedRole as keyof typeof testAccounts
-                      ] ? (
-                        <TestAccountOptionLabel
-                          name={
-                            testAccounts[
-                              selectedRole as keyof typeof testAccounts
-                            ].name
-                          }
-                          email={
-                            testAccounts[
-                              selectedRole as keyof typeof testAccounts
-                            ].email
-                          }
-                        />
-                      ) : (
-                        <SelectValue placeholder="Select Role Based Test Account" />
-                      )}
-                    </SelectTrigger>
-                    <SelectContent className="border-gray-200 bg-white">
-                      <SelectItem
-                        value="test-admin"
-                        className="cursor-pointer font-normal text-gray-700 focus:bg-primary-50 focus:text-primary-900"
-                      >
-                        <TestAccountOptionLabel
-                          name={testAccounts["test-admin"].name}
-                          email={testAccounts["test-admin"].email}
-                        />
-                      </SelectItem>
-                      {selectedRole && (
-                        <SelectItem
-                          value="clear"
-                          className="cursor-pointer font-normal text-gray-600 focus:bg-gray-100 focus:text-gray-700"
-                        >
-                          <span className="inline-flex items-center gap-2 font-normal">
-                            <X className="h-4 w-4" />
-                            Clear Selection
-                          </span>
-                        </SelectItem>
-                      )}
-                    </SelectContent>
-                  </Select>
-                </StaggerItem>
+                {import.meta.env.DEV && Object.keys(devTestAccounts).length > 0 && (
+                  <StaggerItem index={2} className="space-y-2">
+                    <Label
+                      htmlFor="test-account"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Development Test Accounts
+                    </Label>
+                    <Select
+                      key={`select-${selectedRole || "empty"}`}
+                      value={selectedRole || undefined}
+                      onValueChange={handleRoleSelect}
+                    >
+                      <SelectTrigger className="border border-gray-300 bg-white/80 text-gray-700 [&>span]:inline-flex [&>span]:items-center [&>span]:gap-2 [&>span]:truncate">
+                        {selectedRole && devTestAccounts[selectedRole] ? (
+                          <TestAccountOptionLabel
+                            name={devTestAccounts[selectedRole].name}
+                            email={devTestAccounts[selectedRole].email}
+                          />
+                        ) : (
+                          <SelectValue placeholder="Select Dev Test Account" />
+                        )}
+                      </SelectTrigger>
+                      <SelectContent className="border-gray-200 bg-white">
+                        {Object.entries(devTestAccounts).map(([key, account]) => (
+                          <SelectItem
+                            key={key}
+                            value={key}
+                            className="cursor-pointer font-normal text-gray-700 focus:bg-primary-50 focus:text-primary-900"
+                          >
+                            <TestAccountOptionLabel
+                              name={account.name}
+                              email={account.email}
+                            />
+                          </SelectItem>
+                        ))}
+                        {selectedRole && (
+                          <SelectItem
+                            value="clear"
+                            className="cursor-pointer font-normal text-gray-600 focus:bg-gray-100 focus:text-gray-700"
+                          >
+                            <span className="inline-flex items-center gap-2 font-normal">
+                              <X className="h-4 w-4" />
+                              Clear Selection
+                            </span>
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </StaggerItem>
+                )}
 
                 <StaggerItem index={3} className="space-y-2">
                   <Label
@@ -321,7 +336,9 @@ const SignIn = () => {
                   </Button>
                 </StaggerItem>
 
-                <StaggerItem index={6} className="relative my-6">
+                {isGoogleAuthEnabled && (
+                  <>
+                    <StaggerItem index={6} className="relative my-6">
                   <Separator className="bg-gray-300" />
                   <div className="relative flex justify-center text-sm">
                     <span className="px-2 bg-white text-gray-500">or</span>
@@ -364,6 +381,8 @@ const SignIn = () => {
                     Continue with Google
                   </Button>
                 </StaggerItem>
+                  </>
+                )}
 
                 <StaggerItem index={8} className="text-center">
                   <p className="text-sm text-gray-600">

@@ -6,6 +6,7 @@ import { getHotelsSearchUrl } from "../lib/nav-utils";
 import { prefetchBusinessInsightsQueries } from "../lib/invalidate-queries";
 import { queryClient } from "../main";
 import * as apiClient from "../api-client";
+import { useQuery } from "react-query";
 
 const NAV_AUTH_WIDTH = "min-w-[120px]";
 
@@ -15,9 +16,18 @@ const navLinkClass =
 const MainNav = () => {
   const { isLoggedIn } = useAppContext();
 
+  const { data: currentUser } = useQuery(
+    "fetchCurrentUser",
+    apiClient.fetchCurrentUser,
+    { enabled: isLoggedIn }
+  );
+
+  const role = currentUser?.role ? currentUser.role.toLowerCase() : "";
+  const isOwnerOrAdmin = role === "hotel_owner" || role === "admin";
+
   // Prefetch owner lists on hover so destination chrome + data arrive faster
   const prefetchMyHotels = () => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn || !isOwnerOrAdmin) return;
     void queryClient.prefetchQuery("fetchMyHotels", apiClient.fetchMyHotels);
   };
   const prefetchMyBookings = () => {
@@ -33,27 +43,33 @@ const MainNav = () => {
       <Link to={getHotelsSearchUrl()} className={navLinkClass}>
         Hotels
       </Link>
-      <Link
-        to="/my-bookings"
-        className={navLinkClass}
-        onMouseEnter={prefetchMyBookings}
-      >
-        My Bookings
-      </Link>
-      <Link
-        to="/business-insights"
-        className={navLinkClass}
-        onMouseEnter={() => prefetchBusinessInsightsQueries(queryClient)}
-      >
-        Business Insights
-      </Link>
-      <Link
-        to="/my-hotels"
-        className={navLinkClass}
-        onMouseEnter={prefetchMyHotels}
-      >
-        My Hotels
-      </Link>
+      {isLoggedIn && (
+        <Link
+          to="/my-bookings"
+          className={navLinkClass}
+          onMouseEnter={prefetchMyBookings}
+        >
+          My Bookings
+        </Link>
+      )}
+      {isLoggedIn && isOwnerOrAdmin && (
+        <>
+          <Link
+            to="/business-insights"
+            className={navLinkClass}
+            onMouseEnter={() => prefetchBusinessInsightsQueries(queryClient)}
+          >
+            Business Insights
+          </Link>
+          <Link
+            to="/my-hotels"
+            className={navLinkClass}
+            onMouseEnter={prefetchMyHotels}
+          >
+            My Hotels
+          </Link>
+        </>
+      )}
 
       <div className={`flex items-center justify-end ${NAV_AUTH_WIDTH}`}>
         {isLoggedIn ? (

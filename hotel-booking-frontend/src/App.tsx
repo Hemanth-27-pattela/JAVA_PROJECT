@@ -24,6 +24,8 @@ import ApiStatus from "./pages/ApiStatus";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import AuthCallback from "./pages/AuthCallback";
 import AdminRoute from "./components/AdminRoute";
+import OwnerRoute from "./components/OwnerRoute";
+import RequestOwnerAccess from "./pages/RequestOwnerAccess";
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminHotels from "./pages/admin/AdminHotels";
@@ -31,6 +33,7 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminReviews from "./pages/admin/AdminReviews";
 import AdminBookings from "./pages/admin/AdminBookings";
 import AdminActivity from "./pages/admin/AdminActivity";
+import AdminOwnerRequests from "./pages/admin/AdminOwnerRequests";
 
 const App = () => {
   const { isLoggedIn } = useAppContext();
@@ -81,9 +84,11 @@ const App = () => {
         <Route
           path="/business-insights"
           element={
-            <Layout>
-              <AnalyticsDashboard />
-            </Layout>
+            <OwnerRoute>
+              <Layout>
+                <AnalyticsDashboard />
+              </Layout>
+            </OwnerRoute>
           }
         />
         <Route
@@ -111,14 +116,48 @@ const App = () => {
           }
         />
 
+        {/* Guest workflow: Request hotel owner status */}
         <Route
-          path="/my-hotels"
+          path="/request-owner-access"
           element={
             <Layout>
-              <MyHotels />
+              <RequestOwnerAccess />
             </Layout>
           }
         />
+
+        {/* Role-gated property management routes */}
+        <Route
+          path="/my-hotels"
+          element={
+            <OwnerRoute>
+              <Layout>
+                <MyHotels />
+              </Layout>
+            </OwnerRoute>
+          }
+        />
+        <Route
+          path="/add-hotel"
+          element={
+            <OwnerRoute>
+              <Layout>
+                <AddHotel />
+              </Layout>
+            </OwnerRoute>
+          }
+        />
+        <Route
+          path="/edit-hotel/:hotelId"
+          element={
+            <OwnerRoute>
+              <Layout>
+                <EditHotel />
+              </Layout>
+            </OwnerRoute>
+          }
+        />
+
         <Route
           path="/my-bookings"
           element={
@@ -138,6 +177,7 @@ const App = () => {
           }
         >
           <Route index element={<AdminDashboard />} />
+          <Route path="owner-requests" element={<AdminOwnerRequests />} />
           <Route path="hotels" element={<AdminHotels />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="reviews" element={<AdminReviews />} />
@@ -146,32 +186,14 @@ const App = () => {
         </Route>
 
         {isLoggedIn && (
-          <>
-            <Route
-              path="/hotel/:hotelId/booking"
-              element={
-                <Layout>
-                  <Booking />
-                </Layout>
-              }
-            />
-            <Route
-              path="/add-hotel"
-              element={
-                <Layout>
-                  <AddHotel />
-                </Layout>
-              }
-            />
-            <Route
-              path="/edit-hotel/:hotelId"
-              element={
-                <Layout>
-                  <EditHotel />
-                </Layout>
-              }
-            />
-          </>
+          <Route
+            path="/hotel/:hotelId/booking"
+            element={
+              <Layout>
+                <Booking />
+              </Layout>
+            }
+          />
         )}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
