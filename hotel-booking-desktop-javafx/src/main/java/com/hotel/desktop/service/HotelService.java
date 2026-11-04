@@ -54,3 +54,4 @@ public class HotelService {
         return Arrays.asList(hotels);
     }
 }
+

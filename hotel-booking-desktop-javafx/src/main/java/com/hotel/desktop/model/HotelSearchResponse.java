@@ -38,3 +38,4 @@ public class HotelSearchResponse {
         this.pagination = pagination != null ? pagination : new Pagination();
     }
 }
+

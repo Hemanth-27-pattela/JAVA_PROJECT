@@ -319,3 +319,4 @@ public class Hotel {
         public void setSmokingPolicy(String smokingPolicy) { this.smokingPolicy = smokingPolicy; }
     }
 }
+

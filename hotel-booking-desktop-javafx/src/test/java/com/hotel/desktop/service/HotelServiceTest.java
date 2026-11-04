@@ -324,3 +324,4 @@ class HotelServiceTest {
         assertEquals("Hotel Two", hotels.get(1).getName());
     }
 }
+

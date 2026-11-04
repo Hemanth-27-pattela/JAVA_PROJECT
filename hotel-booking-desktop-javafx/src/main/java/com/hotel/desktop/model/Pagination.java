@@ -44,3 +44,4 @@ public class Pagination {
         this.pages = pages;
     }
 }
+

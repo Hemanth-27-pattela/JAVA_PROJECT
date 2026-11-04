@@ -138,3 +138,4 @@ public class HotelCardController {
         placeholderImageLabel.setVisible(true);
     }
 }
+
