@@ -102,6 +102,15 @@ D:\HOTEL_PROJECT\Hotel-Booking-Management-System--React-MERN-FullStack\
 - **Sign-Out Flow:** Calls `POST /api/auth/logout`, clears `SessionManager`, purges viewport, redirects to login.
 - **Tests & Visual Verification:** **41 desktop tests passing**, 5 visual screenshots verified.
 
+#### Phase 9.5: JavaFX Guest Hotel Browsing, Search, Filters & Details
+- **Hero Search Bar:** Destination, Check-in / Check-out DatePickers, Adults / Children guest spinners, search & reset.
+- **Multi-Faceted Sidebar Filters:** Price per night max slider/field, Star Rating checkboxes (1–5 Stars), Hotel Types (Hotel, Resort, Boutique, Cabin, etc.), Facilities (Free WiFi, Pool, Spa, etc.), and Sort order.
+- **Responsive Hotel Cards:** Primary photo thumbnail with asynchronous background image streaming and graceful neutral SVG fallback, star ratings, dynamic price, badges, snippet, and "View Details" button.
+- **Hotel Details View:** Full property display with hero image, gallery thumbnails, specs, policies, pricing breakdown, and Phase 9.6 booking alert.
+- **Asynchronous Architecture:** JavaFX `Task` with task cancellation to prevent out-of-order race conditions.
+- **Error & Empty States:** Polished loading spinner, API error banner, and empty state with "Clear Filters & View All".
+- **Automated Tests & Screenshots:** **53 desktop tests passing** (12 added in Phase 9.5), 5 visual verification screenshots generated.
+
 ---
 
 ## 3. Seeded Accounts & Credentials
@@ -118,9 +127,10 @@ D:\HOTEL_PROJECT\Hotel-Booking-Management-System--React-MERN-FullStack\
 
 - **MySQL Database:** Running on port 3306 (`hotel_booking`).
 - **Spring Boot Backend:** Active on `http://localhost:5001`.
-- **JavaFX Desktop App:** Built, passing 41/41 automated tests, visual verification completed.
+- **JavaFX Desktop App:** Built, passing 53/53 automated tests, 10 visual screenshots generated across Phases 9.4 and 9.5.
 - **Reports Persisted:**
   - `PHASE_STATUS.md`
   - `PROJECT_PROGRESS.md`
   - `PHASE_9_4_NAVIGATION_SHELL_REPORT.md` (in brain artifacts)
-- **Next Step:** Ready to begin **Phase 9.5: JavaFX Functional Modules** (Hotel Search & Browse, Bookings View, or Hotel Management).
+  - `PHASE_9_5_HOTEL_BROWSING_REPORT.md` (in brain artifacts)
+- **Next Step:** Ready to begin **Phase 9.6: JavaFX Guest Booking Flow, Reservation & Payment Integration**.

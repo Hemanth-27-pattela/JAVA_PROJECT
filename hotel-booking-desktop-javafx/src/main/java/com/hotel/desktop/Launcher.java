@@ -6,7 +6,10 @@ package com.hotel.desktop;
  */
 public class Launcher {
     public static void main(String[] args) {
-        if ("screenshots".equalsIgnoreCase(System.getProperty("app.mode"))
+        if ("browse-screenshots".equalsIgnoreCase(System.getProperty("app.mode"))
+                || (args != null && args.length > 0 && "browse-screenshots".equalsIgnoreCase(args[0]))) {
+            com.hotel.desktop.visual.VisualBrowseHotelsGenerator.main(args);
+        } else if ("screenshots".equalsIgnoreCase(System.getProperty("app.mode"))
                 || (args != null && args.length > 0 && "screenshots".equalsIgnoreCase(args[0]))) {
             com.hotel.desktop.visual.VisualScreenshotGenerator.main(args);
         } else {

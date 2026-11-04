@@ -21,7 +21,8 @@
 | **Phase 9.2** | JavaFX Maven Project Setup & Baseline Window | **Completed** | Verified | Independent `hotel-booking-desktop-javafx` module |
 | **Phase 9.3** | JavaFX Login, Registration & Spring Boot JWT Auth Integration | **Completed** | Verified (34 tests) | **Verified against live :5001 backend (Guest, Owner, Admin)** |
 | **Phase 9.4** | JavaFX Main Application Shell & Role-Based Navigation | **Completed** | **41 tests passed** | **Verified live: sidebar menus, route guards, logout** |
-| **Phase 9.5** | JavaFX Functional Modules (Hotel Browse, Bookings, Management) | **Next Up** | Pending | Ready to begin |
+| **Phase 9.5** | JavaFX Guest Hotel Browsing, Search, Filters & Details | **Completed** | **53 tests passed** | **Verified live: 8 seeded hotels, search, filters, details** |
+| **Phase 9.6** | JavaFX Guest Booking Flow, Reservation & Payment | **Next Up** | Pending | Ready to begin |
 
 ---
 
@@ -29,10 +30,10 @@
 
 - **Backend Endpoints:** 42+ endpoints in `hotel-booking-backend-spring`.
 - **Spring Boot Tests:** **190 tests passing**, 0 failures, 0 errors, 0 skipped (`BUILD SUCCESS`).
-- **JavaFX Desktop Tests:** **41 tests passing**, 0 failures, 0 errors, 0 skipped (`BUILD SUCCESS`).
+- **JavaFX Desktop Tests:** **53 tests passing**, 0 failures, 0 errors, 0 skipped (`BUILD SUCCESS`).
 - **Live Database:** MySQL 8.0.45 running on port 3306 with demo data seeded.
 - **Spring Boot Backend:** Running on `http://localhost:5001` (PID active, `/api/health` UP).
-- **Desktop Application:** `hotel-booking-desktop-javafx` tested and visually verified with 5 high-res screenshots.
+- **Desktop Application:** `hotel-booking-desktop-javafx` tested and visually verified with 10 total screenshots (5 from Phase 9.4, 5 from Phase 9.5).
 - **Security Posture:**
   - `GET /api/health/detailed` restricted strictly to `ADMIN` (401 anonymous, 403 user/owner, 200 admin).
   - Client-side token invalidation and cookie clearing upon sign-out.

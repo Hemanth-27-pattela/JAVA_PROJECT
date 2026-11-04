@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hotel.desktop.controller.HotelDetailsController"
+      spacing="14.0"
+      styleClass="hotel-details-root">
+
+    <padding>
+        <Insets top="16.0" right="24.0" bottom="20.0" left="24.0"/>
+    </padding>
+
+    <!-- Top Action Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="12.0">
+        <Button fx:id="backButton" text="← Back to Browse Hotels" styleClass="btn-outline"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="featuredBadge" text="FEATURED PROPERTY" styleClass="featured-overlay-badge" visible="false"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="hotel-scroll-pane">
+        <VBox spacing="18.0">
+            <padding>
+                <Insets top="4.0" right="12.0" bottom="24.0" left="4.0"/>
+            </padding>
+
+            <!-- Hotel Header & Title -->
+            <VBox spacing="6.0" styleClass="details-header-card">
+                <HBox alignment="CENTER_LEFT" spacing="14.0">
+                    <Label fx:id="hotelNameLabel" text="Hotel Grand Plaza" styleClass="details-title" HBox.hgrow="ALWAYS"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="starRatingLabel" text="★★★★★" styleClass="details-stars"/>
+                </HBox>
+                <Label fx:id="locationLabel" text="📍 London, United Kingdom" styleClass="details-location"/>
+                <!-- Type Badges Row -->
+                <FlowPane fx:id="typesContainer" hgap="8.0" vgap="6.0">
+                    <VBox.margin>
+                        <Insets top="6.0"/>
+                    </VBox.margin>
+                </FlowPane>
+            </VBox>
+
+            <!-- Media & Overview Section -->
+            <HBox spacing="20.0" alignment="TOP_LEFT">
+                <!-- Gallery Section -->
+                <VBox spacing="10.0" prefWidth="540.0" minWidth="540.0">
+                    <StackPane fx:id="heroImageContainer" prefWidth="540.0" prefHeight="310.0" minHeight="310.0" maxHeight="310.0" styleClass="details-hero-box">
+                        <Label fx:id="placeholderHeroLabel" text="🏨&#10;No Property Photo Available" textAlignment="CENTER" styleClass="details-image-placeholder"/>
+                        <ImageView fx:id="heroImageView" fitWidth="540.0" fitHeight="310.0" preserveRatio="true" smooth="true" visible="false"/>
+                    </StackPane>
+                    <!-- Thumbnails Row -->
+                    <HBox fx:id="imageThumbnailsRow" spacing="8.0" alignment="CENTER_LEFT" prefHeight="70.0"/>
+                </VBox>
+
+                <!-- Quick Reservation Overview Card -->
+                <VBox spacing="14.0" HBox.hgrow="ALWAYS" styleClass="details-summary-card">
+                    <Label text="Pricing &amp; Policies" styleClass="details-card-heading"/>
+                    <Separator/>
+
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <Label text="Nightly Rate:" styleClass="details-prop-label"/>
+                        <Label fx:id="priceLabel" text="£195 / night" styleClass="details-price-badge"/>
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="16.0">
+                        <Label fx:id="adultCapacityLabel" text="Adults: 2" styleClass="details-spec-badge"/>
+                        <Label fx:id="childCapacityLabel" text="Children: 1" styleClass="details-spec-badge"/>
+                    </HBox>
+
+                    <VBox spacing="6.0">
+                        <Label text="Check-In / Out Times" styleClass="details-prop-label"/>
+                        <HBox spacing="12.0">
+                            <Label text="Check-In:" styleClass="details-sublabel"/>
+                            <Label fx:id="checkInPolicyLabel" text="15:00" styleClass="details-value"/>
+                            <Label text="Check-Out:" styleClass="details-sublabel"/>
+                            <Label fx:id="checkOutPolicyLabel" text="11:00" styleClass="details-value"/>
+                        </HBox>
+                    </VBox>
+
+                    <VBox spacing="4.0">
+                        <Label text="Cancellation Policy" styleClass="details-prop-label"/>
+                        <Label fx:id="cancellationPolicyLabel" text="Free cancellation up to 24h prior to arrival" wrapText="true" styleClass="details-value"/>
+                    </VBox>
+
+                    <Region VBox.vgrow="ALWAYS"/>
+
+                    <!-- Phase 9.5 Notice Banner -->
+                    <VBox spacing="4.0" styleClass="info-banner">
+                        <Label text="ℹ️ Booking &amp; Checkout System" styleClass="info-banner-title"/>
+                        <Label text="Online reservation, room selection, and payment will be activated in Phase 9.6." wrapText="true" styleClass="info-banner-text"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+
+            <!-- Full Description Card -->
+            <VBox spacing="10.0" styleClass="details-content-card">
+                <Label text="About This Property" styleClass="details-card-heading"/>
+                <Separator/>
+                <Label fx:id="descriptionTextLabel" text="Description details..." wrapText="true" styleClass="details-description-text"/>
+            </VBox>
+
+            <!-- Facilities & Amenities Card -->
+            <VBox spacing="10.0" styleClass="details-content-card">
+                <Label text="Facilities &amp; Amenities" styleClass="details-card-heading"/>
+                <Separator/>
+                <FlowPane fx:id="facilitiesContainer" hgap="10.0" vgap="10.0"/>
+            </VBox>
+
+            <!-- Property Contact & Location Card -->
+            <VBox spacing="10.0" styleClass="details-content-card">
+                <Label text="Contact &amp; Assistance" styleClass="details-card-heading"/>
+                <Separator/>
+                <HBox spacing="30.0">
+                    <VBox spacing="4.0">
+                        <Label text="Phone:" styleClass="details-prop-label"/>
+                        <Label fx:id="contactPhoneLabel" text="+44 20 7946 0991" styleClass="details-value"/>
+                    </VBox>
+                    <VBox spacing="4.0">
+                        <Label text="Email:" styleClass="details-prop-label"/>
+                        <Label fx:id="contactEmailLabel" text="info@hotel.com" styleClass="details-value"/>
+                    </VBox>
+                    <VBox spacing="4.0">
+                        <Label text="Official Website:" styleClass="details-prop-label"/>
+                        <Label fx:id="contactWebsiteLabel" text="https://hotel.com" styleClass="details-value"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+
+</VBox>

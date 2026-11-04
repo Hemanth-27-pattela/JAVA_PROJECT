@@ -156,14 +156,21 @@ public class MainLayoutController {
             }
         }
 
-        // Load placeholder page into central content area
+        // Load target page into central content area
         try {
-            URL fxmlUrl = getClass().getResource("/fxml/placeholder-page.fxml");
-            FXMLLoader loader = new FXMLLoader(fxmlUrl);
-            Parent pageRoot = loader.load();
+            Parent pageRoot;
+            if (item == NavigationItem.BROWSE_HOTELS) {
+                URL fxmlUrl = getClass().getResource("/fxml/browse-hotels.fxml");
+                FXMLLoader loader = new FXMLLoader(fxmlUrl);
+                pageRoot = loader.load();
+            } else {
+                URL fxmlUrl = getClass().getResource("/fxml/placeholder-page.fxml");
+                FXMLLoader loader = new FXMLLoader(fxmlUrl);
+                pageRoot = loader.load();
 
-            PlaceholderPageController controller = loader.getController();
-            controller.setNavigationItem(item, sessionManager.getCurrentUser());
+                PlaceholderPageController controller = loader.getController();
+                controller.setNavigationItem(item, sessionManager.getCurrentUser());
+            }
 
             contentArea.getChildren().setAll(pageRoot);
             currentItem = item;
@@ -180,6 +187,21 @@ public class MainLayoutController {
             System.err.println("Failed to load page for item: " + item.getTitle() + " - " + e.getMessage());
             e.printStackTrace();
             return false;
+        }
+    }
+
+    /**
+     * Replaces the central viewport content with an arbitrary node (e.g. HotelDetails view).
+     */
+    public void setContentNode(Parent node, String pageTitle) {
+        if (contentArea != null && node != null) {
+            contentArea.getChildren().setAll(node);
+            if (activePageLabel != null) {
+                activePageLabel.setText("Current: " + (pageTitle != null ? pageTitle : "Details"));
+            }
+            if (statusMessageLabel != null) {
+                statusMessageLabel.setText("Viewing " + (pageTitle != null ? pageTitle : "Details"));
+            }
         }
     }
 

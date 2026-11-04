@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hotel.desktop.controller.BrowseHotelsController"
+      spacing="16.0"
+      styleClass="browse-hotels-root">
+
+    <padding>
+        <Insets top="20.0" right="24.0" bottom="20.0" left="24.0"/>
+    </padding>
+
+    <!-- Top Search Header & Control Bar -->
+    <VBox spacing="12.0" styleClass="search-header-container">
+        <HBox alignment="CENTER_LEFT" spacing="12.0">
+            <VBox spacing="2.0">
+                <Label text="Find Your Perfect Stay" styleClass="browse-header-title"/>
+                <Label text="Search luxury hotels, boutique apartments, and resorts across global destinations" styleClass="browse-header-subtitle"/>
+            </VBox>
+        </HBox>
+
+        <HBox spacing="10.0" alignment="CENTER_LEFT" styleClass="search-bar-box">
+            <!-- Destination Input -->
+            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                <Label text="Destination" styleClass="search-input-label"/>
+                <TextField fx:id="destinationField" promptText="City or Country (e.g. London, Tokyo)" styleClass="search-text-field"/>
+            </VBox>
+
+            <!-- Check-In Date -->
+            <VBox spacing="4.0" prefWidth="140.0">
+                <Label text="Check-In" styleClass="search-input-label"/>
+                <DatePicker fx:id="checkInDatePicker" styleClass="search-date-picker"/>
+            </VBox>
+
+            <!-- Check-Out Date -->
+            <VBox spacing="4.0" prefWidth="140.0">
+                <Label text="Check-Out" styleClass="search-input-label"/>
+                <DatePicker fx:id="checkOutDatePicker" styleClass="search-date-picker"/>
+            </VBox>
+
+            <!-- Adult Guests -->
+            <VBox spacing="4.0" prefWidth="85.0">
+                <Label text="Adults" styleClass="search-input-label"/>
+                <Spinner fx:id="adultCountSpinner" styleClass="search-spinner"/>
+            </VBox>
+
+            <!-- Child Guests -->
+            <VBox spacing="4.0" prefWidth="85.0">
+                <Label text="Children" styleClass="search-input-label"/>
+                <Spinner fx:id="childCountSpinner" styleClass="search-spinner"/>
+            </VBox>
+
+            <!-- Action Buttons -->
+            <VBox spacing="4.0" alignment="BOTTOM_CENTER">
+                <Label text=" " styleClass="search-input-label"/>
+                <HBox spacing="6.0">
+                    <Button fx:id="searchButton" text="Search 🔍" styleClass="btn-primary"/>
+                    <Button fx:id="resetSearchButton" text="Reset" styleClass="btn-outline"/>
+                </HBox>
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <!-- Main Content: Sidebar Filters & Results Container -->
+    <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+
+        <!-- Left Filters Sidebar -->
+        <VBox prefWidth="240.0" minWidth="240.0" maxWidth="240.0" spacing="14.0" styleClass="filter-sidebar">
+            <padding>
+                <Insets top="16.0" right="16.0" bottom="16.0" left="16.0"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Filter Properties" styleClass="filter-section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="clearFiltersButton" text="Clear" styleClass="link-button"/>
+            </HBox>
+
+            <Separator/>
+
+            <!-- Max Price Filter -->
+            <VBox spacing="6.0">
+                <Label text="Budget / Night" styleClass="filter-group-title"/>
+                <ComboBox fx:id="maxPriceComboBox" maxWidth="Infinity" styleClass="filter-combo-box"/>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Star Rating Filter -->
+            <VBox spacing="6.0">
+                <Label text="Star Rating" styleClass="filter-group-title"/>
+                <CheckBox fx:id="star5CheckBox" text="5 Stars (★★★★★)" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="star4CheckBox" text="4 Stars (★★★★)" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="star3CheckBox" text="3 Stars (★★★)" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="star2CheckBox" text="2 Stars (★★)" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="star1CheckBox" text="1 Star (★)" styleClass="filter-checkbox"/>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Hotel Type Filter -->
+            <VBox spacing="6.0">
+                <Label text="Property Type" styleClass="filter-group-title"/>
+                <CheckBox fx:id="typeLuxuryCheckBox" text="Luxury" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="typeBoutiqueCheckBox" text="Boutique" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="typeBudgetCheckBox" text="Budget" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="typeBusinessCheckBox" text="Business" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="typeFamilyCheckBox" text="Family" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="typeRomanticCheckBox" text="Romantic" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="typeResortCheckBox" text="Beach Resort" styleClass="filter-checkbox"/>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Facilities Filter -->
+            <VBox spacing="6.0">
+                <Label text="Facilities &amp; Amenities" styleClass="filter-group-title"/>
+                <CheckBox fx:id="facWifiCheckBox" text="Free WiFi" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="facParkingCheckBox" text="Parking" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="facPoolCheckBox" text="Outdoor Pool" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="facSpaCheckBox" text="Spa" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="facFitnessCheckBox" text="Fitness Center" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="facShuttleCheckBox" text="Airport Shuttle" styleClass="filter-checkbox"/>
+                <CheckBox fx:id="facNonSmokingCheckBox" text="Non-Smoking Rooms" styleClass="filter-checkbox"/>
+            </VBox>
+
+            <Button fx:id="applyFiltersButton" text="Apply Filters" maxWidth="Infinity" styleClass="btn-primary"/>
+        </VBox>
+
+        <!-- Right Results Panel -->
+        <VBox spacing="12.0" HBox.hgrow="ALWAYS">
+
+            <!-- Subheader: Results Count & Sort Dropdown -->
+            <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="results-header-bar">
+                <Label fx:id="resultsCountLabel" text="Searching hotels..." styleClass="results-count-text"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Sort By:" styleClass="sort-label"/>
+                <ComboBox fx:id="sortComboBox" prefWidth="180.0" styleClass="filter-combo-box"/>
+            </HBox>
+
+            <!-- Scrollable Hotel Card List with State Overlays -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="hotel-scroll-pane">
+                <StackPane alignment="TOP_CENTER">
+                    <!-- Hotel Cards List -->
+                    <VBox fx:id="hotelListContainer" spacing="14.0">
+                        <padding>
+                            <Insets top="4.0" right="8.0" bottom="16.0" left="4.0"/>
+                        </padding>
+                    </VBox>
+
+                    <!-- Loading State Overlay -->
+                    <VBox fx:id="loadingContainer" alignment="CENTER" spacing="16.0" prefHeight="350.0" visible="false" managed="false">
+                        <ProgressIndicator fx:id="loadingIndicator" prefWidth="48.0" prefHeight="48.0"/>
+                        <Label fx:id="loadingMessageLabel" text="Searching for hotels..." styleClass="loading-state-text"/>
+                    </VBox>
+
+                    <!-- Empty State Overlay -->
+                    <VBox fx:id="emptyContainer" alignment="CENTER" spacing="14.0" prefHeight="350.0" styleClass="empty-state-box" visible="false" managed="false">
+                        <Label text="🏨" styleClass="empty-state-icon"/>
+                        <Label text="No Hotels Found" styleClass="empty-state-title"/>
+                        <Label text="We couldn't find any hotels matching your current search and filter criteria.&#10;Try adjusting your filters, destination, or budget." textAlignment="CENTER" styleClass="empty-state-subtitle"/>
+                        <Button fx:id="emptyResetButton" text="Clear Filters &amp; View All" styleClass="btn-secondary"/>
+                    </VBox>
+
+                    <!-- API Error State Overlay -->
+                    <VBox fx:id="errorContainer" alignment="CENTER" spacing="14.0" prefHeight="350.0" styleClass="error-state-box" visible="false" managed="false">
+                        <Label text="⚠️" styleClass="error-state-icon"/>
+                        <Label text="Unable to Load Hotel Results" styleClass="error-state-title"/>
+                        <Label fx:id="errorMessageLabel" text="Server communication error." textAlignment="CENTER" styleClass="error-state-subtitle"/>
+                        <Button fx:id="retryButton" text="Retry Search" styleClass="btn-primary"/>
+                    </VBox>
+                </StackPane>
+            </ScrollPane>
+
+            <!-- Bottom Pagination Bar -->
+            <HBox fx:id="paginationBar" alignment="CENTER" spacing="14.0" styleClass="pagination-container">
+                <padding>
+                    <Insets top="8.0" bottom="8.0"/>
+                </padding>
+                <Button fx:id="prevPageButton" text="← Previous" styleClass="pagination-button"/>
+                <Label fx:id="pageInfoLabel" text="Page 1 of 1" styleClass="pagination-info"/>
+                <Button fx:id="nextPageButton" text="Next →" styleClass="pagination-button"/>
+            </HBox>
+
+        </VBox>
+    </HBox>
+
+</VBox>
