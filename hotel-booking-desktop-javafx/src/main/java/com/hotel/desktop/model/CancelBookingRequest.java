@@ -25,3 +25,4 @@ public class CancelBookingRequest {
         this.cancellationReason = cancellationReason;
     }
 }
+

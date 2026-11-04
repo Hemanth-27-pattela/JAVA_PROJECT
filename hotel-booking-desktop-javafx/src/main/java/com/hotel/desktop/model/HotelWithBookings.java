@@ -35,3 +35,4 @@ public class HotelWithBookings extends Hotel {
         }
     }
 }
+

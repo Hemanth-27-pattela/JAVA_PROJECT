@@ -47,3 +47,4 @@ public class PaymentIntentResponse {
         this.totalCost = totalCost;
     }
 }
+

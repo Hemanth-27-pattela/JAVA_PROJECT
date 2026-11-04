@@ -198,3 +198,4 @@ class BookingModelTest {
         assertEquals("£495.00", cancelResp.getFormattedRefundAmount());
     }
 }
+

@@ -52,3 +52,4 @@ public class CancelBookingResponse {
         return "£" + String.format(Locale.UK, "%.2f", getRefundAmount());
     }
 }
+

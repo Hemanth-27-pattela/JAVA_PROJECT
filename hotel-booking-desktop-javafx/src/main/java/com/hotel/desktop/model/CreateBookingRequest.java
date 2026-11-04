@@ -120,3 +120,4 @@ public class CreateBookingRequest {
         this.specialRequests = specialRequests;
     }
 }
+

@@ -25,3 +25,4 @@ public class PaymentIntentRequest {
         this.numberOfNights = numberOfNights;
     }
 }
+
