@@ -2,9 +2,13 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
@@ -30,7 +34,7 @@
         <Label fx:id="featuredBadge" text="FEATURED PROPERTY" styleClass="featured-overlay-badge" visible="false"/>
     </HBox>
 
-    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="hotel-scroll-pane">
+    <ScrollPane fx:id="detailsScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="hotel-scroll-pane">
         <VBox spacing="18.0">
             <padding>
                 <Insets top="4.0" right="12.0" bottom="24.0" left="4.0"/>
@@ -96,10 +100,84 @@
 
                     <Region VBox.vgrow="ALWAYS"/>
 
-                    <!-- Phase 9.5 Notice Banner -->
-                    <VBox spacing="4.0" styleClass="info-banner">
-                        <Label text="ℹ️ Booking &amp; Checkout System" styleClass="info-banner-title"/>
-                        <Label text="Online reservation, room selection, and payment will be activated in Phase 9.6." wrapText="true" styleClass="info-banner-text"/>
+                    <!-- Phase 9.6 Booking Card -->
+                    <VBox spacing="12.0" styleClass="booking-form-box">
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <Label text="Book Your Stay" styleClass="booking-form-heading"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="💳 Demo / Simulated Payment" styleClass="badge-demo-mode"/>
+                        </HBox>
+                        <Separator/>
+
+                        <!-- Dates Selection -->
+                        <HBox spacing="10.0">
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Check-In" styleClass="booking-form-label"/>
+                                <DatePicker fx:id="checkInPicker" maxWidth="Infinity" promptText="Select arrival"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Check-Out" styleClass="booking-form-label"/>
+                                <DatePicker fx:id="checkOutPicker" maxWidth="Infinity" promptText="Select departure"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Guests Selection -->
+                        <HBox spacing="10.0">
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Adults (18+)" styleClass="booking-form-label"/>
+                                <Spinner fx:id="adultSpinner" maxWidth="Infinity"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Children (0-17)" styleClass="booking-form-label"/>
+                                <Spinner fx:id="childSpinner" maxWidth="Infinity"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Contact Info Row -->
+                        <HBox spacing="10.0">
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Guest Name" styleClass="booking-form-label"/>
+                                <TextField fx:id="guestNameField" promptText="Full name"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Contact Phone" styleClass="booking-form-label"/>
+                                <TextField fx:id="phoneField" promptText="+44 7700 900123"/>
+                            </VBox>
+                        </HBox>
+
+                        <VBox spacing="4.0">
+                            <Label text="Guest Email" styleClass="booking-form-label"/>
+                            <TextField fx:id="emailField" promptText="guest@hotel.com"/>
+                        </VBox>
+
+                        <VBox spacing="4.0">
+                            <Label text="Special Requests (Optional)" styleClass="booking-form-label"/>
+                            <TextField fx:id="specialRequestsField" promptText="e.g. Quiet room, late check-in"/>
+                        </VBox>
+
+                        <!-- Price Calculation Breakdown -->
+                        <VBox spacing="6.0" styleClass="booking-calc-box">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Duration &amp; Rate:" styleClass="booking-calc-label"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="breakdownRateLabel" text="1 night × £0.00" styleClass="booking-calc-value"/>
+                            </HBox>
+                            <Separator/>
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Total Cost (GBP):" styleClass="booking-total-label"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="breakdownTotalLabel" text="£0.00" styleClass="booking-total-value"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Pre-flight / Error status label -->
+                        <Label fx:id="bookingStatusLabel" text="" wrapText="true" visible="false" managed="false"/>
+
+                        <!-- Action Button & Spinner -->
+                        <HBox spacing="10.0" alignment="CENTER">
+                            <Button fx:id="bookNowButton" text="Proceed to Reservation →" maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="btn-primary"/>
+                            <ProgressIndicator fx:id="bookingSpinner" prefWidth="28.0" prefHeight="28.0" visible="false" managed="false"/>
+                        </HBox>
                     </VBox>
                 </VBox>
             </HBox>

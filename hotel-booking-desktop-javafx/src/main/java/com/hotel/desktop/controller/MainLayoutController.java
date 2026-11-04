@@ -163,6 +163,10 @@ public class MainLayoutController {
                 URL fxmlUrl = getClass().getResource("/fxml/browse-hotels.fxml");
                 FXMLLoader loader = new FXMLLoader(fxmlUrl);
                 pageRoot = loader.load();
+            } else if (item == NavigationItem.MY_BOOKINGS) {
+                URL fxmlUrl = getClass().getResource("/fxml/my-bookings.fxml");
+                FXMLLoader loader = new FXMLLoader(fxmlUrl);
+                pageRoot = loader.load();
             } else {
                 URL fxmlUrl = getClass().getResource("/fxml/placeholder-page.fxml");
                 FXMLLoader loader = new FXMLLoader(fxmlUrl);

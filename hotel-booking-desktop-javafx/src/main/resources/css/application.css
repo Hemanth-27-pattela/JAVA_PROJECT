@@ -1014,3 +1014,220 @@
     -fx-line-spacing: 4px;
 }
 
+/* =============================================================
+ * Phase 9.6 — Booking & My Bookings Modern Navy Theme Styles
+ * ============================================================= */
+.booking-form-box {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 16px;
+}
+
+.booking-form-heading {
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0f172a;
+}
+
+.booking-form-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #475569;
+}
+
+.booking-calc-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px 14px;
+}
+
+.booking-calc-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #64748b;
+}
+
+.booking-calc-value {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1e293b;
+}
+
+.booking-total-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0f172a;
+}
+
+.booking-total-value {
+    -fx-font-size: 20px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #2563eb;
+}
+
+/* Status Badges */
+.badge-status {
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 3px 10px;
+    -fx-background-radius: 9999px;
+    -fx-border-radius: 9999px;
+    -fx-border-width: 1px;
+}
+
+.badge-confirmed {
+    -fx-background-color: #dcfce7;
+    -fx-border-color: #86efac;
+    -fx-text-fill: #15803d;
+}
+
+.badge-cancelled {
+    -fx-background-color: #fee2e2;
+    -fx-border-color: #fca5a5;
+    -fx-text-fill: #b91c1c;
+}
+
+.badge-completed {
+    -fx-background-color: #e0e7ff;
+    -fx-border-color: #a5b4fc;
+    -fx-text-fill: #4338ca;
+}
+
+.badge-pending {
+    -fx-background-color: #fef3c7;
+    -fx-border-color: #fde68a;
+    -fx-text-fill: #b45309;
+}
+
+.badge-paid {
+    -fx-background-color: #ecfdf5;
+    -fx-border-color: #6ee7b7;
+    -fx-text-fill: #047857;
+}
+
+.badge-refunded {
+    -fx-background-color: #f3e8ff;
+    -fx-border-color: #d8b4fe;
+    -fx-text-fill: #7e22ce;
+}
+
+.badge-failed {
+    -fx-background-color: #fef2f2;
+    -fx-border-color: #fecaca;
+    -fx-text-fill: #991b1b;
+}
+
+.badge-demo-mode {
+    -fx-background-color: #fffbeb;
+    -fx-border-color: #fde68a;
+    -fx-text-fill: #92400e;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 3px 8px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-width: 1px;
+}
+
+/* My Bookings Page */
+.my-bookings-container {
+    -fx-background-color: #f8fafc;
+}
+
+.my-bookings-card {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 18px 22px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.04), 8, 0, 0, 2);
+}
+
+.my-bookings-card:hover {
+    -fx-border-color: #cbd5e1;
+}
+
+.booking-hotel-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #0f172a;
+}
+
+.booking-hotel-location {
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #64748b;
+}
+
+.booking-meta-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #64748b;
+}
+
+.booking-meta-value {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #1e293b;
+}
+
+.booking-price-badge {
+    -fx-font-size: 19px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #0f172a;
+}
+
+.filter-tab-button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 7px 16px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.filter-tab-button:hover {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #0f172a;
+}
+
+.filter-tab-button-active {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #2563eb;
+}
+
+.filter-tab-button-active:hover {
+    -fx-background-color: #1d4ed8;
+    -fx-text-fill: #ffffff;
+}
+
+.btn-cancel-booking {
+    -fx-background-color: #fef2f2;
+    -fx-text-fill: #b91c1c;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-padding: 7px 14px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #fecaca;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.btn-cancel-booking:hover {
+    -fx-background-color: #fee2e2;
+    -fx-border-color: #fca5a5;
+}
+
+.btn-cancel-booking:disabled {
+    -fx-opacity: 0.45;
+}
+
+
