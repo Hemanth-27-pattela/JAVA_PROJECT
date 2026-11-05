@@ -167,6 +167,10 @@ public class MainLayoutController {
                 URL fxmlUrl = getClass().getResource("/fxml/my-bookings.fxml");
                 FXMLLoader loader = new FXMLLoader(fxmlUrl);
                 pageRoot = loader.load();
+            } else if (item == NavigationItem.HOME) {
+                URL fxmlUrl = getClass().getResource("/fxml/home-view.fxml");
+                FXMLLoader loader = new FXMLLoader(fxmlUrl);
+                pageRoot = loader.load();
             } else {
                 URL fxmlUrl = getClass().getResource("/fxml/placeholder-page.fxml");
                 FXMLLoader loader = new FXMLLoader(fxmlUrl);

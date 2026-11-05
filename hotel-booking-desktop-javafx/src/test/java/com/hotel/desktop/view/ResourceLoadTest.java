@@ -26,7 +26,8 @@ class ResourceLoadTest {
             "/fxml/hotel-card.fxml",
             "/fxml/browse-hotels.fxml",
             "/fxml/hotel-details.fxml",
-            "/fxml/my-bookings.fxml"
+            "/fxml/my-bookings.fxml",
+            "/fxml/recommendation-card.fxml"
     })
     @DisplayName("Verify all FXML view files exist and parse as valid XML")
     void testFxmlResourcesExistAndAreValidXml(String fxmlPath) throws Exception {

@@ -216,6 +216,50 @@
                 </HBox>
             </VBox>
 
+            <!-- ========================================================= -->
+            <!-- PHASE 9.7 STAGE E: SIMILAR HOTELS YOU MAY LIKE            -->
+            <!-- ========================================================= -->
+            <VBox fx:id="similarHotelsSection" spacing="12.0" styleClass="details-content-card">
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="8.0">
+                            <Label text="Similar Hotels You May Like" styleClass="details-card-heading"/>
+                            <Label text="Curated Matches" styleClass="rec-pill-badge"/>
+                        </HBox>
+                        <Label text="Properties sharing similar tier, price range, and destination style." styleClass="rec-section-subtitle"/>
+                    </VBox>
+                    <Button fx:id="refreshSimilarButton" text="🔄 Refresh" onAction="#handleRefreshSimilar" styleClass="rec-btn-mini"/>
+                </HBox>
+
+                <Separator/>
+
+                <!-- Section Body (StackPane for States) -->
+                <StackPane minHeight="160.0">
+                    <!-- Cards FlowPane -->
+                    <FlowPane fx:id="similarHotelsContainer" hgap="16.0" vgap="16.0" styleClass="rec-flow-container"/>
+
+                    <!-- Loading State -->
+                    <VBox fx:id="similarLoadingBox" alignment="CENTER" spacing="10.0" styleClass="rec-state-box" visible="false" managed="false">
+                        <ProgressIndicator styleClass="rec-spinner" prefWidth="36.0" prefHeight="36.0"/>
+                        <Label text="Finding similar hotels you may like..." styleClass="rec-state-text"/>
+                    </VBox>
+
+                    <!-- Error State -->
+                    <VBox fx:id="similarErrorBox" alignment="CENTER" spacing="10.0" styleClass="rec-error-box" visible="false" managed="false">
+                        <Label text="⚠️ Unable to load similar hotels" styleClass="rec-error-title"/>
+                        <Label fx:id="similarErrorMessage" text="Failed to retrieve recommendations." styleClass="rec-error-subtitle"/>
+                        <Button text="Retry Similar" onAction="#handleRefreshSimilar" styleClass="btn-outline"/>
+                    </VBox>
+
+                    <!-- Empty State -->
+                    <VBox fx:id="similarEmptyBox" alignment="CENTER" spacing="8.0" styleClass="rec-state-box" visible="false" managed="false">
+                        <Label text="🏨" styleClass="rec-empty-icon"/>
+                        <Label text="No similar hotels found for this property." styleClass="rec-empty-title"/>
+                        <Label text="Explore our full catalog to discover additional stays." styleClass="rec-empty-subtitle"/>
+                    </VBox>
+                </StackPane>
+            </VBox>
+
         </VBox>
     </ScrollPane>
 

@@ -21,6 +21,7 @@
         <jackson.version>2.17.2</jackson.version>
         <junit.version>5.10.2</junit.version>
         <mockito.version>5.11.0</mockito.version>
+        <javafx.mainClass>com.hotel.desktop.Launcher</javafx.mainClass>
     </properties>
 
     <dependencies>
@@ -106,7 +107,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.hotel.desktop.Launcher</mainClass>
+                    <mainClass>${javafx.mainClass}</mainClass>
                 </configuration>
             </plugin>
         </plugins>

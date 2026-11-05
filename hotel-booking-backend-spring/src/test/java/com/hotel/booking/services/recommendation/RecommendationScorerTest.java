@@ -336,7 +336,24 @@ class RecommendationScorerTest {
     class SimilarityTests {
 
         @Test
-        @DisplayName("Scenario 12: Similarity scoring evaluates multi-attribute alignment")
+        @DisplayName("Scenario 12a: Similarity weights sum to 1.00 and match approved formula constants")
+        void similarity_weightsSumToOne() {
+            assertEquals(0.30, RecommendationScorer.SIM_WEIGHT_DESTINATION, 0.0001);
+            assertEquals(0.25, RecommendationScorer.SIM_WEIGHT_TYPE, 0.0001);
+            assertEquals(0.20, RecommendationScorer.SIM_WEIGHT_FACILITY, 0.0001);
+            assertEquals(0.15, RecommendationScorer.SIM_WEIGHT_PRICE, 0.0001);
+            assertEquals(0.10, RecommendationScorer.SIM_WEIGHT_STAR, 0.0001);
+
+            double totalWeight = RecommendationScorer.SIM_WEIGHT_DESTINATION
+                    + RecommendationScorer.SIM_WEIGHT_TYPE
+                    + RecommendationScorer.SIM_WEIGHT_FACILITY
+                    + RecommendationScorer.SIM_WEIGHT_PRICE
+                    + RecommendationScorer.SIM_WEIGHT_STAR;
+            assertEquals(1.00, totalWeight, 0.0001);
+        }
+
+        @Test
+        @DisplayName("Scenario 12b: Similarity scoring evaluates multi-attribute alignment and self-exclusion")
         void similarity_evaluatesMultiAttributeAlignment() {
             Hotel src = new Hotel();
             src.setId("h-source");
@@ -364,19 +381,151 @@ class RecommendationScorerTest {
             // Same hotel (same ID) must return 0.0 (exclude self)
             double selfScore = scorer.calculateSimilarityScore(src, src);
             assertEquals(0.0, selfScore, 0.0001);
+        }
 
-            // Partial similarity
+        @Test
+        @DisplayName("Scenario 12c: Similarity scoring matches exact hand-calculated formula: 0.30(dest) + 0.25(type) + 0.20(fac) + 0.15(price) + 0.10(star)")
+        void similarity_matchesExactApprovedFormula() {
+            Hotel src = new Hotel();
+            src.setId("h-source");
+            src.setCity("London");
+            src.setCountry("United Kingdom");
+            src.setType(List.of("Boutique", "Luxury"));
+            src.setFacilities(List.of("WiFi", "Gym", "Spa"));
+            src.setPricePerNight(BigDecimal.valueOf(150.0));
+            src.setStarRating(4);
+
             Hotel differentCity = new Hotel();
             differentCity.setId("h-diff");
             differentCity.setCity("Edinburgh");
-            differentCity.setCountry("United Kingdom"); // Same country => 0.6
-            differentCity.setType(List.of("Boutique", "Historic")); // overlap 1/3 ~ 0.333
-            differentCity.setFacilities(List.of("WiFi")); // overlap 1/3 ~ 0.333
+            differentCity.setCountry("United Kingdom"); // Same country => sDest = 0.6
+            differentCity.setType(List.of("Boutique", "Historic")); // overlap 1/3
+            differentCity.setFacilities(List.of("WiFi")); // overlap 1/3
             differentCity.setPricePerNight(BigDecimal.valueOf(200.0)); // 1 - 50/200 = 0.75
             differentCity.setStarRating(3); // 1 - 1/4 = 0.75
 
+            // Exact calculation:
+            // 0.30 * 0.60 = 0.1800
+            // 0.25 * (1.0 / 3.0) = 0.083333...
+            // 0.20 * (1.0 / 3.0) = 0.066666...
+            // 0.15 * 0.75 = 0.1125
+            // 0.10 * 0.75 = 0.0750
+            // Total = 0.1800 + 0.083333... + 0.066666... + 0.1125 + 0.0750 = 0.5175
+            double expected = (0.30 * 0.60)
+                    + (0.25 * (1.0 / 3.0))
+                    + (0.20 * (1.0 / 3.0))
+                    + (0.15 * 0.75)
+                    + (0.10 * 0.75);
+            assertEquals(0.5175, expected, 0.0001);
+
             double partScore = scorer.calculateSimilarityScore(src, differentCity);
-            assertTrue(partScore > 0.0 && partScore < 1.0);
+            assertEquals(expected, partScore, 0.0001);
+        }
+
+        @Test
+        @DisplayName("Scenario 12d: Individual similarity attributes contribute exact weights in isolation")
+        void similarity_individualComponentsVerifyExactWeights() {
+            Hotel base = new Hotel();
+            base.setId("h-base");
+            base.setCity("Tokyo");
+            base.setCountry("Japan");
+            base.setType(List.of("Capsule"));
+            base.setFacilities(List.of("WiFi"));
+            base.setPricePerNight(BigDecimal.valueOf(100.0));
+            base.setStarRating(1);
+
+            // 1. Destination match alone: city matches, other attributes orthogonal
+            // To make star orthogonal: 1 vs 5 => 1 - 4/4 = 0.0
+            // To make price orthogonal: 100 vs 0 (or extreme divergent 10000) => ~0.0
+            Hotel destOnly = new Hotel();
+            destOnly.setId("h-dest");
+            destOnly.setCity("Tokyo"); // match -> 1.0 => weight 0.30
+            destOnly.setCountry("Japan");
+            destOnly.setType(List.of("Resort")); // 0 overlap
+            destOnly.setFacilities(List.of("Pool")); // 0 overlap
+            destOnly.setPricePerNight(BigDecimal.valueOf(0.0)); // 0.0 price compat
+            destOnly.setStarRating(5); // star diff = 4 => 1 - 4/4 = 0.0
+
+            double destScore = scorer.calculateSimilarityScore(base, destOnly);
+            assertEquals(0.30, destScore, 0.0001);
+
+            // 2. Type match alone
+            Hotel typeOnly = new Hotel();
+            typeOnly.setId("h-type");
+            typeOnly.setCity("Paris");
+            typeOnly.setCountry("France");
+            typeOnly.setType(List.of("Capsule")); // match -> 1.0 => weight 0.25
+            typeOnly.setFacilities(List.of("Pool"));
+            typeOnly.setPricePerNight(BigDecimal.valueOf(0.0));
+            typeOnly.setStarRating(5);
+
+            double typeScore = scorer.calculateSimilarityScore(base, typeOnly);
+            assertEquals(0.25, typeScore, 0.0001);
+
+            // 3. Facility match alone
+            Hotel facOnly = new Hotel();
+            facOnly.setId("h-fac");
+            facOnly.setCity("Paris");
+            facOnly.setCountry("France");
+            facOnly.setType(List.of("Resort"));
+            facOnly.setFacilities(List.of("WiFi")); // match -> 1.0 => weight 0.20
+            facOnly.setPricePerNight(BigDecimal.valueOf(0.0));
+            facOnly.setStarRating(5);
+
+            double facScore = scorer.calculateSimilarityScore(base, facOnly);
+            assertEquals(0.20, facScore, 0.0001);
+
+            // 4. Price match alone
+            Hotel priceOnly = new Hotel();
+            priceOnly.setId("h-price");
+            priceOnly.setCity("Paris");
+            priceOnly.setCountry("France");
+            priceOnly.setType(List.of("Resort"));
+            priceOnly.setFacilities(List.of("Pool"));
+            priceOnly.setPricePerNight(BigDecimal.valueOf(100.0)); // match -> 1.0 => weight 0.15
+            priceOnly.setStarRating(5);
+
+            double priceScore = scorer.calculateSimilarityScore(base, priceOnly);
+            assertEquals(0.15, priceScore, 0.0001);
+
+            // 5. Star match alone
+            Hotel starOnly = new Hotel();
+            starOnly.setId("h-star");
+            starOnly.setCity("Paris");
+            starOnly.setCountry("France");
+            starOnly.setType(List.of("Resort"));
+            starOnly.setFacilities(List.of("Pool"));
+            starOnly.setPricePerNight(BigDecimal.valueOf(0.0));
+            starOnly.setStarRating(1); // match -> 1.0 => weight 0.10
+
+            double starScore = scorer.calculateSimilarityScore(base, starOnly);
+            assertEquals(0.10, starScore, 0.0001);
+        }
+
+        @Test
+        @DisplayName("Scenario 12e: Boundary cases: zero overlap returns 0.0 and extreme values clamp safely")
+        void similarity_boundaryCasesAndZeroOverlap() {
+            Hotel h1 = new Hotel();
+            h1.setId("h1");
+            h1.setCity("Tokyo");
+            h1.setCountry("Japan");
+            h1.setType(List.of("Capsule"));
+            h1.setFacilities(List.of("WiFi"));
+            h1.setPricePerNight(BigDecimal.valueOf(50.0));
+            h1.setStarRating(1);
+
+            Hotel h2 = new Hotel();
+            h2.setId("h2");
+            h2.setCity("Reykjavik");
+            h2.setCountry("Iceland");
+            h2.setType(List.of("Igloo"));
+            h2.setFacilities(List.of("Sauna"));
+            h2.setPricePerNight(BigDecimal.valueOf(0.0));
+            h2.setStarRating(5);
+
+            // Zero destination (0.0), zero type (0.0), zero facilities (0.0), zero price (0.0), zero star (0.0)
+            double zeroScore = scorer.calculateSimilarityScore(h1, h2);
+            assertEquals(0.0, zeroScore, 0.0001);
         }
     }
 

@@ -4,14 +4,18 @@ import com.hotel.desktop.model.CreateBookingRequest;
 import com.hotel.desktop.model.Hotel;
 import com.hotel.desktop.model.NavigationItem;
 import com.hotel.desktop.model.PaymentIntentResponse;
+import com.hotel.desktop.model.RecommendationDto;
 import com.hotel.desktop.model.User;
 import com.hotel.desktop.service.ApiException;
 import com.hotel.desktop.service.BookingService;
+import com.hotel.desktop.service.RecommendationService;
 import com.hotel.desktop.service.SessionManager;
 import com.hotel.desktop.util.ViewNavigator;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -28,13 +32,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -87,23 +95,39 @@ public class HotelDetailsController {
     @FXML private Button bookNowButton;
     @FXML private ProgressIndicator bookingSpinner;
 
+    // === Phase 9.7 Stage E: Similar Hotels Injections ===
+    @FXML private VBox similarHotelsSection;
+    @FXML private Button refreshSimilarButton;
+    @FXML private FlowPane similarHotelsContainer;
+    @FXML private VBox similarLoadingBox;
+    @FXML private VBox similarErrorBox;
+    @FXML private Label similarErrorMessage;
+    @FXML private VBox similarEmptyBox;
+
     private final BookingService bookingService;
     private final SessionManager sessionManager;
+    private final RecommendationService recommendationService;
 
     private Hotel hotel;
     private Runnable backAction;
+    private Task<List<RecommendationDto>> similarTask;
 
     public HotelDetailsController() {
-        this(new BookingService(), SessionManager.getInstance());
+        this(new BookingService(), SessionManager.getInstance(), new RecommendationService());
     }
 
     public HotelDetailsController(BookingService bookingService) {
-        this(bookingService, SessionManager.getInstance());
+        this(bookingService, SessionManager.getInstance(), new RecommendationService());
     }
 
     public HotelDetailsController(BookingService bookingService, SessionManager sessionManager) {
+        this(bookingService, sessionManager, new RecommendationService());
+    }
+
+    public HotelDetailsController(BookingService bookingService, SessionManager sessionManager, RecommendationService recommendationService) {
         this.bookingService = bookingService;
         this.sessionManager = sessionManager;
+        this.recommendationService = recommendationService;
     }
 
     public void scrollToBooking() {
@@ -118,6 +142,7 @@ public class HotelDetailsController {
 
         populateView();
         initializeBookingForm();
+        loadSimilarHotels();
     }
 
     @FXML
@@ -134,70 +159,98 @@ public class HotelDetailsController {
     private void populateView() {
         if (hotel == null) return;
 
-        hotelNameLabel.setText(hotel.getName());
-        starRatingLabel.setText(hotel.getStarRatingDisplay());
-        locationLabel.setText("📍 " + hotel.getLocationDisplay());
-        priceLabel.setText(hotel.getFormattedPrice() + " / night");
+        if (hotelNameLabel != null) {
+            hotelNameLabel.setText(hotel.getName());
+        }
+        if (starRatingLabel != null) {
+            starRatingLabel.setText(hotel.getStarRatingDisplay());
+        }
+        if (locationLabel != null) {
+            locationLabel.setText("📍 " + hotel.getLocationDisplay());
+        }
+        if (priceLabel != null) {
+            priceLabel.setText(hotel.getFormattedPrice() + " / night");
+        }
 
-        if (Boolean.TRUE.equals(hotel.getIsFeatured())) {
-            featuredBadge.setVisible(true);
-            featuredBadge.setManaged(true);
-        } else {
-            featuredBadge.setVisible(false);
-            featuredBadge.setManaged(false);
+        if (featuredBadge != null) {
+            if (Boolean.TRUE.equals(hotel.getIsFeatured())) {
+                featuredBadge.setVisible(true);
+                featuredBadge.setManaged(true);
+            } else {
+                featuredBadge.setVisible(false);
+                featuredBadge.setManaged(false);
+            }
         }
 
         // Capacities
-        adultCapacityLabel.setText("Adults: " + hotel.getAdultCount());
-        childCapacityLabel.setText("Children: " + hotel.getChildCount());
+        if (adultCapacityLabel != null) {
+            adultCapacityLabel.setText("Adults: " + hotel.getAdultCount());
+        }
+        if (childCapacityLabel != null) {
+            childCapacityLabel.setText("Children: " + hotel.getChildCount());
+        }
 
         // Policies
         Hotel.HotelPolicies policies = hotel.getPolicies();
-        checkInPolicyLabel.setText(policies.getCheckInTime());
-        checkOutPolicyLabel.setText(policies.getCheckOutTime());
-        cancellationPolicyLabel.setText(policies.getCancellationPolicy());
+        if (policies != null) {
+            if (checkInPolicyLabel != null) checkInPolicyLabel.setText(policies.getCheckInTime());
+            if (checkOutPolicyLabel != null) checkOutPolicyLabel.setText(policies.getCheckOutTime());
+            if (cancellationPolicyLabel != null) cancellationPolicyLabel.setText(policies.getCancellationPolicy());
+        }
 
         // Description
-        descriptionTextLabel.setText(hotel.getDescription() != null && !hotel.getDescription().isBlank()
-                ? hotel.getDescription()
-                : "No detailed description provided for this property.");
+        if (descriptionTextLabel != null) {
+            descriptionTextLabel.setText(hotel.getDescription() != null && !hotel.getDescription().isBlank()
+                    ? hotel.getDescription()
+                    : "No detailed description provided for this property.");
+        }
 
         // Types
-        typesContainer.getChildren().clear();
-        for (String type : hotel.getType()) {
-            if (type != null && !type.isBlank()) {
-                Label badge = new Label(type);
-                badge.getStyleClass().add("hotel-type-badge");
-                typesContainer.getChildren().add(badge);
+        if (typesContainer != null) {
+            typesContainer.getChildren().clear();
+            for (String type : hotel.getType()) {
+                if (type != null && !type.isBlank()) {
+                    Label badge = new Label(type);
+                    badge.getStyleClass().add("hotel-type-badge");
+                    typesContainer.getChildren().add(badge);
+                }
             }
         }
 
         // Facilities
-        facilitiesContainer.getChildren().clear();
-        for (String fac : hotel.getFacilities()) {
-            if (fac != null && !fac.isBlank()) {
-                Label badge = new Label(fac);
-                badge.getStyleClass().add("hotel-facility-badge");
-                facilitiesContainer.getChildren().add(badge);
+        if (facilitiesContainer != null) {
+            facilitiesContainer.getChildren().clear();
+            for (String fac : hotel.getFacilities()) {
+                if (fac != null && !fac.isBlank()) {
+                    Label badge = new Label(fac);
+                    badge.getStyleClass().add("hotel-facility-badge");
+                    facilitiesContainer.getChildren().add(badge);
+                }
             }
         }
 
         // Contact info
         Hotel.HotelContact contact = hotel.getContact();
-        contactPhoneLabel.setText(contact.getPhone().isEmpty() ? "Not specified" : contact.getPhone());
-        contactEmailLabel.setText(contact.getEmail().isEmpty() ? "Not specified" : contact.getEmail());
-        contactWebsiteLabel.setText(contact.getWebsite().isEmpty() ? "Not specified" : contact.getWebsite());
+        if (contact != null) {
+            if (contactPhoneLabel != null) contactPhoneLabel.setText(contact.getPhone().isEmpty() ? "Not specified" : contact.getPhone());
+            if (contactEmailLabel != null) contactEmailLabel.setText(contact.getEmail().isEmpty() ? "Not specified" : contact.getEmail());
+            if (contactWebsiteLabel != null) contactWebsiteLabel.setText(contact.getWebsite().isEmpty() ? "Not specified" : contact.getWebsite());
+        }
 
         // Load Main Hero Image
-        loadHeroImage(hotel.getFirstImageUrl());
+        if (heroImageView != null) {
+            loadHeroImage(hotel.getFirstImageUrl());
+        }
 
         // Load Thumbnails if available
-        imageThumbnailsRow.getChildren().clear();
-        if (hotel.getImageUrls() != null && hotel.getImageUrls().size() > 1) {
-            for (String url : hotel.getImageUrls()) {
-                if (url != null && !url.isBlank()) {
-                    ImageView thumb = createThumbnailView(url);
-                    imageThumbnailsRow.getChildren().add(thumb);
+        if (imageThumbnailsRow != null) {
+            imageThumbnailsRow.getChildren().clear();
+            if (hotel.getImageUrls() != null && hotel.getImageUrls().size() > 1) {
+                for (String url : hotel.getImageUrls()) {
+                    if (url != null && !url.isBlank()) {
+                        ImageView thumb = createThumbnailView(url);
+                        imageThumbnailsRow.getChildren().add(thumb);
+                    }
                 }
             }
         }
@@ -560,4 +613,209 @@ public class HotelDetailsController {
 
         return thumb;
     }
+
+    // =========================================================================
+    // PHASE 9.7 STAGE E: SIMILAR HOTELS IMPLEMENTATION
+    // =========================================================================
+
+    @FXML
+    public void handleRefreshSimilar() {
+        loadSimilarHotels();
+    }
+
+    public void loadSimilarHotels() {
+        if (hotel == null || hotel.getId() == null || hotel.getId().isBlank()) {
+            showSimilarEmpty();
+            return;
+        }
+
+        if (similarTask != null && similarTask.isRunning()) {
+            similarTask.cancel();
+        }
+
+        showSimilarLoading();
+
+        final String hotelId = hotel.getId();
+
+        similarTask = new Task<>() {
+            @Override
+            protected List<RecommendationDto> call() throws Exception {
+                return recommendationService.getSimilarRecommendations(hotelId, 4);
+            }
+        };
+
+        similarTask.setOnSucceeded(e -> {
+            List<RecommendationDto> results = similarTask.getValue();
+            Platform.runLater(() -> renderSimilarResults(results));
+        });
+
+        similarTask.setOnFailed(e -> {
+            if (similarTask.isCancelled()) return;
+            Throwable ex = similarTask.getException();
+            String msg = ex instanceof ApiException apiEx ? apiEx.getMessage() : "Failed to retrieve similar hotels: " + ex.getMessage();
+            Platform.runLater(() -> showSimilarError(msg));
+        });
+
+        Thread thread = new Thread(similarTask, "SimilarHotelsTask-" + hotelId);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private void renderSimilarResults(List<RecommendationDto> results) {
+        hideSimilarStates();
+
+        if (results == null || results.isEmpty()) {
+            showSimilarEmpty();
+            return;
+        }
+
+        // Exclude the currently displayed hotel if the API returned it
+        final String currentHotelId = hotel != null ? hotel.getId() : "";
+        List<RecommendationDto> filtered = results.stream()
+                .filter(rec -> rec.getId() != null && !rec.getId().equals(currentHotelId))
+                .toList();
+
+        if (filtered.isEmpty()) {
+            showSimilarEmpty();
+            return;
+        }
+
+        if (similarHotelsContainer != null) {
+            similarHotelsContainer.setVisible(true);
+            similarHotelsContainer.setManaged(true);
+            similarHotelsContainer.getChildren().clear();
+
+            for (RecommendationDto rec : filtered) {
+                try {
+                    URL cardUrl = getClass().getResource("/fxml/recommendation-card.fxml");
+                    FXMLLoader loader = new FXMLLoader(cardUrl);
+                    Parent cardNode = loader.load();
+
+                    RecommendationCardController cardCtrl = loader.getController();
+                    cardCtrl.setRecommendation(rec, this::handleSimilarHotelSelection);
+
+                    similarHotelsContainer.getChildren().add(cardNode);
+                } catch (IOException ex) {
+                    System.err.println("Failed to load recommendation card: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void handleSimilarHotelSelection(RecommendationDto rec) {
+        if (rec == null) return;
+        Hotel targetHotel = rec.toHotel();
+        openHotelDetails(targetHotel);
+    }
+
+    private void openHotelDetails(Hotel targetHotel) {
+        if (targetHotel == null) return;
+
+        try {
+            URL fxmlUrl = getClass().getResource("/fxml/hotel-details.fxml");
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            Parent detailsNode = loader.load();
+
+            HotelDetailsController controller = loader.getController();
+
+            // Chain back navigation: clicking back on target hotel returns to current hotel,
+            // while preserving the original backAction chain (e.g. back to Catalog or Home).
+            final Hotel previousHotel = this.hotel;
+            final Runnable previousBackAction = this.backAction;
+
+            controller.setHotel(targetHotel, () -> {
+                if (previousHotel != null) {
+                    openHotelDetails(previousHotel, previousBackAction);
+                } else if (previousBackAction != null) {
+                    previousBackAction.run();
+                }
+            });
+
+            MainLayoutController mainShell = ViewNavigator.getMainLayoutController();
+            if (mainShell != null) {
+                mainShell.setContentNode(detailsNode, targetHotel.getName());
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to load hotel details view: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void openHotelDetails(Hotel targetHotel, Runnable customBackAction) {
+        if (targetHotel == null) return;
+
+        try {
+            URL fxmlUrl = getClass().getResource("/fxml/hotel-details.fxml");
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            Parent detailsNode = loader.load();
+
+            HotelDetailsController controller = loader.getController();
+            controller.setHotel(targetHotel, customBackAction);
+
+            MainLayoutController mainShell = ViewNavigator.getMainLayoutController();
+            if (mainShell != null) {
+                mainShell.setContentNode(detailsNode, targetHotel.getName());
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to load hotel details view: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void showSimilarLoading() {
+        hideSimilarStates();
+        if (similarLoadingBox != null) {
+            similarLoadingBox.setVisible(true);
+            similarLoadingBox.setManaged(true);
+        }
+    }
+
+    private void showSimilarError(String message) {
+        hideSimilarStates();
+        if (similarErrorBox != null) {
+            similarErrorBox.setVisible(true);
+            similarErrorBox.setManaged(true);
+        }
+        if (similarErrorMessage != null) {
+            similarErrorMessage.setText(message);
+        }
+    }
+
+    private void showSimilarEmpty() {
+        hideSimilarStates();
+        if (similarEmptyBox != null) {
+            similarEmptyBox.setVisible(true);
+            similarEmptyBox.setManaged(true);
+        }
+    }
+
+    private void hideSimilarStates() {
+        if (similarHotelsContainer != null) {
+            similarHotelsContainer.setVisible(false);
+            similarHotelsContainer.setManaged(false);
+            similarHotelsContainer.getChildren().clear();
+        }
+        if (similarLoadingBox != null) {
+            similarLoadingBox.setVisible(false);
+            similarLoadingBox.setManaged(false);
+        }
+        if (similarErrorBox != null) {
+            similarErrorBox.setVisible(false);
+            similarErrorBox.setManaged(false);
+        }
+        if (similarEmptyBox != null) {
+            similarEmptyBox.setVisible(false);
+            similarEmptyBox.setManaged(false);
+        }
+    }
+
+    // Accessors for testing & verification
+    public FlowPane getSimilarHotelsContainer() { return similarHotelsContainer; }
+    public VBox getSimilarLoadingBox() { return similarLoadingBox; }
+    public VBox getSimilarErrorBox() { return similarErrorBox; }
+    public VBox getSimilarEmptyBox() { return similarEmptyBox; }
+    public VBox getSimilarHotelsSection() { return similarHotelsSection; }
+    public Hotel getHotel() { return hotel; }
+    public Runnable getBackAction() { return backAction; }
 }

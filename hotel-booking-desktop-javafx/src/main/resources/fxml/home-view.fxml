@@ -3,126 +3,187 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.hotel.desktop.controller.HomeController"
-            styleClass="root-pane"
-            prefWidth="1280.0" prefHeight="800.0">
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hotel.desktop.controller.HomeController"
+      spacing="16.0"
+      styleClass="dashboard-root">
 
-    <!-- Top Navigation Header -->
-    <top>
-        <VBox styleClass="header-bar">
-            <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="header-content">
-                <padding>
-                    <Insets top="14.0" right="32.0" bottom="14.0" left="32.0"/>
-                </padding>
-                <Label text="🏨" styleClass="brand-icon"/>
-                <VBox alignment="CENTER_LEFT" spacing="2.0">
-                    <Label text="HOTEL BOOKING SYSTEM" styleClass="brand-title"/>
-                    <Label text="Desktop Edition • Spring Boot REST Client" styleClass="brand-subtitle"/>
-                </VBox>
-                <HBox HBox.hgrow="ALWAYS"/>
+    <padding>
+        <Insets top="20.0" right="24.0" bottom="24.0" left="24.0"/>
+    </padding>
 
-                <!-- User profile badge & Logout -->
-                <HBox alignment="CENTER" spacing="12.0">
-                    <VBox alignment="CENTER_RIGHT" spacing="2.0">
-                        <Label fx:id="userEmailLabel" text="user@example.com" styleClass="header-user-email"/>
-                        <Label fx:id="roleBadgeLabel" text="GUEST" styleClass="role-badge role-badge-guest"/>
-                    </VBox>
-                    <Button fx:id="logoutButton" text="Sign Out" onAction="#handleLogout"
-                            styleClass="btn-logout"/>
-                </HBox>
+    <!-- Top Hero Welcome Card -->
+    <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="rec-hero-card">
+        <padding>
+            <Insets top="20.0" right="24.0" bottom="20.0" left="24.0"/>
+        </padding>
+
+        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <Label text="✨" styleClass="rec-hero-icon"/>
+                <Label fx:id="welcomeHeading" text="Welcome to Your Travel Portal" styleClass="rec-hero-title"/>
             </HBox>
-            <Separator styleClass="header-separator"/>
+            <Label fx:id="welcomeSubtitle"
+                   text="Intelligent hotel recommendations curated from your stay history, booking preferences, and verified ratings."
+                   styleClass="rec-hero-subtitle" wrapText="true"/>
         </VBox>
-    </top>
 
-    <!-- Center Content -->
-    <center>
-        <VBox alignment="TOP_CENTER" spacing="24.0" styleClass="content-area">
-            <padding>
-                <Insets top="32.0" right="48.0" bottom="32.0" left="48.0"/>
-            </padding>
-
-            <!-- Welcome Header Card -->
-            <VBox spacing="10.0" styleClass="welcome-card" maxWidth="960.0">
-                <padding>
-                    <Insets top="28.0" right="32.0" bottom="28.0" left="32.0"/>
-                </padding>
-                <HBox alignment="CENTER_LEFT" spacing="14.0">
-                    <Label text="👋" styleClass="hero-badge-icon"/>
-                    <VBox spacing="4.0">
-                        <Label fx:id="welcomeHeading" text="Welcome back!" styleClass="welcome-heading"/>
-                        <Label text="You have successfully authenticated via Spring Boot REST API (JWT session active)."
-                               styleClass="welcome-subtitle"/>
-                    </VBox>
-                </HBox>
-            </VBox>
-
-            <!-- Role-Specific Action Card -->
-            <VBox fx:id="roleFeatureBox" spacing="16.0" styleClass="welcome-card" maxWidth="960.0">
-                <padding>
-                    <Insets top="28.0" right="32.0" bottom="28.0" left="32.0"/>
-                </padding>
-                <Label fx:id="roleTitleLabel" text="Role Dashboard" styleClass="card-section-title"/>
-                <Label fx:id="roleDescriptionLabel" text="Role description" styleClass="card-description" wrapText="true"/>
-
-                <Separator styleClass="card-separator"/>
-
-                <HBox spacing="12.0" alignment="CENTER_LEFT">
-                    <Label text="Upcoming Modules:" styleClass="field-label"/>
-                    <Label text="Hotel Search &amp; Filtering" styleClass="tech-badge"/>
-                    <Label text="Room Reservation" styleClass="tech-badge"/>
-                    <Label text="Property Dashboard" styleClass="tech-badge"/>
-                    <Label text="Admin Approvals" styleClass="tech-badge"/>
-                </HBox>
-            </VBox>
-
-            <!-- Active Session Details Card -->
-            <VBox spacing="16.0" styleClass="welcome-card" maxWidth="960.0">
-                <padding>
-                    <Insets top="24.0" right="32.0" bottom="24.0" left="32.0"/>
-                </padding>
-                <Label text="Active Session Telemetry" styleClass="card-section-title"/>
-
-                <GridPane hgap="24.0" vgap="12.0">
-                    <columnConstraints>
-                        <ColumnConstraints minWidth="140.0" prefWidth="180.0"/>
-                        <ColumnConstraints hgrow="ALWAYS"/>
-                    </columnConstraints>
-
-                    <Label text="Session User ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
-                    <Label fx:id="sessionUserIdLabel" text="uuid" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="session-value"/>
-
-                    <Label text="Email Address:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
-                    <Label fx:id="sessionEmailLabel" text="email" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="session-value"/>
-
-                    <Label text="Active Role:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
-                    <Label fx:id="sessionRoleLabel" text="ROLE" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="session-value"/>
-
-                    <Label text="Authorization Token:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="field-label"/>
-                    <Label fx:id="tokenStatusLabel" text="Active" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="session-value-success"/>
-                </GridPane>
-            </VBox>
-        </VBox>
-    </center>
-
-    <!-- Bottom Status Bar -->
-    <bottom>
-        <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="footer-bar">
-            <padding>
-                <Insets top="10.0" right="24.0" bottom="10.0" left="24.0"/>
-            </padding>
-            <Label text="Status: Connected to Spring Boot on port 5001" styleClass="footer-text"/>
-            <HBox HBox.hgrow="ALWAYS"/>
-            <Label text="Phase 9.3 • Hotel Booking Desktop Client" styleClass="footer-text-muted"/>
+        <!-- Quick Action Buttons -->
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <Button fx:id="browseHotelsButton" text="🔍 Browse Catalog" onAction="#handleBrowseHotels" styleClass="btn-outline"/>
+            <Button fx:id="myBookingsButton" text="📅 My Bookings" onAction="#handleMyBookings" styleClass="btn-outline"/>
+            <Button fx:id="refreshAllButton" text="🔄 Refresh All" onAction="#handleRefreshAll" styleClass="btn-primary"/>
         </HBox>
-    </bottom>
-</BorderPane>
+    </HBox>
 
+    <!-- Scrollable Recommendations Content Area -->
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" styleClass="hotel-scroll-pane" VBox.vgrow="ALWAYS">
+        <VBox spacing="28.0" styleClass="rec-dashboard-content">
+            <padding>
+                <Insets top="4.0" right="10.0" bottom="24.0" left="4.0"/>
+            </padding>
+
+            <!-- ========================================================= -->
+            <!-- SECTION 1: PERSONALIZED RECOMMENDATIONS                   -->
+            <!-- ========================================================= -->
+            <VBox spacing="12.0" styleClass="rec-section-container">
+                <!-- Section Header -->
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="8.0">
+                            <Label text="Recommended For You" styleClass="rec-section-title"/>
+                            <Label text="AI Curated" styleClass="rec-pill-badge"/>
+                        </HBox>
+                        <Label text="Personalized picks matching your booking tastes, preferred destinations, and luxury amenities."
+                               styleClass="rec-section-subtitle"/>
+                    </VBox>
+                    <Button fx:id="refreshPersonalizedButton" text="🔄 Refresh" onAction="#loadPersonalizedRecommendations"
+                            styleClass="rec-btn-mini"/>
+                </HBox>
+
+                <!-- Section Body (StackPane for States) -->
+                <StackPane minHeight="180.0">
+                    <!-- Cards Container -->
+                    <FlowPane fx:id="personalizedContainer" hgap="16.0" vgap="16.0" styleClass="rec-flow-container"/>
+
+                    <!-- Loading State -->
+                    <VBox fx:id="personalizedLoadingBox" alignment="CENTER" spacing="10.0" styleClass="rec-state-box" visible="false" managed="false">
+                        <ProgressIndicator styleClass="rec-spinner" prefWidth="40.0" prefHeight="40.0"/>
+                        <Label text="Curating your personalized hotel recommendations..." styleClass="rec-state-text"/>
+                    </VBox>
+
+                    <!-- Error State -->
+                    <VBox fx:id="personalizedErrorBox" alignment="CENTER" spacing="10.0" styleClass="rec-error-box" visible="false" managed="false">
+                        <Label text="⚠️ Unable to load personalized recommendations" styleClass="rec-error-title"/>
+                        <Label fx:id="personalizedErrorMessage" text="Network connection error." styleClass="rec-error-subtitle"/>
+                        <Button text="Retry Personalized" onAction="#loadPersonalizedRecommendations" styleClass="btn-outline"/>
+                    </VBox>
+
+                    <!-- Empty State -->
+                    <VBox fx:id="personalizedEmptyBox" alignment="CENTER" spacing="8.0" styleClass="rec-state-box" visible="false" managed="false">
+                        <Label text="🏨" styleClass="rec-empty-icon"/>
+                        <Label text="No personalized recommendations available yet." styleClass="rec-empty-title"/>
+                        <Label text="Book reservations or browse destinations to establish your stay profile!" styleClass="rec-empty-subtitle"/>
+                    </VBox>
+                </StackPane>
+            </VBox>
+
+            <Separator styleClass="rec-divider"/>
+
+            <!-- ========================================================= -->
+            <!-- SECTION 2: POPULAR / TRENDING CHOICES                     -->
+            <!-- ========================================================= -->
+            <VBox spacing="12.0" styleClass="rec-section-container">
+                <!-- Section Header -->
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="8.0">
+                            <Label text="Trending &amp; Popular Choices" styleClass="rec-section-title"/>
+                            <Label text="High Demand" styleClass="rec-pill-badge-popular"/>
+                        </HBox>
+                        <Label text="Top-booked hotels frequently selected by fellow travelers across prime locations."
+                               styleClass="rec-section-subtitle"/>
+                    </VBox>
+                    <Button fx:id="refreshPopularButton" text="🔄 Refresh" onAction="#loadPopularRecommendations"
+                            styleClass="rec-btn-mini"/>
+                </HBox>
+
+                <!-- Section Body -->
+                <StackPane minHeight="180.0">
+                    <FlowPane fx:id="popularContainer" hgap="16.0" vgap="16.0" styleClass="rec-flow-container"/>
+
+                    <VBox fx:id="popularLoadingBox" alignment="CENTER" spacing="10.0" styleClass="rec-state-box" visible="false" managed="false">
+                        <ProgressIndicator styleClass="rec-spinner" prefWidth="40.0" prefHeight="40.0"/>
+                        <Label text="Discovering trending popular hotels..." styleClass="rec-state-text"/>
+                    </VBox>
+
+                    <VBox fx:id="popularErrorBox" alignment="CENTER" spacing="10.0" styleClass="rec-error-box" visible="false" managed="false">
+                        <Label text="⚠️ Unable to load popular hotels" styleClass="rec-error-title"/>
+                        <Label fx:id="popularErrorMessage" text="Network connection error." styleClass="rec-error-subtitle"/>
+                        <Button text="Retry Popular" onAction="#loadPopularRecommendations" styleClass="btn-outline"/>
+                    </VBox>
+
+                    <VBox fx:id="popularEmptyBox" alignment="CENTER" spacing="8.0" styleClass="rec-state-box" visible="false" managed="false">
+                        <Label text="📈" styleClass="rec-empty-icon"/>
+                        <Label text="No trending hotels found at this time." styleClass="rec-empty-title"/>
+                    </VBox>
+                </StackPane>
+            </VBox>
+
+            <Separator styleClass="rec-divider"/>
+
+            <!-- ========================================================= -->
+            <!-- SECTION 3: TOP-RATED STAYS                                -->
+            <!-- ========================================================= -->
+            <VBox spacing="12.0" styleClass="rec-section-container">
+                <!-- Section Header -->
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="8.0">
+                            <Label text="Highest Guest Ratings" styleClass="rec-section-title"/>
+                            <Label text="Guest Favorites" styleClass="rec-pill-badge-top-rated"/>
+                        </HBox>
+                        <Label text="Consistently celebrated stays backed by Bayesian-weighted authentic guest reviews."
+                               styleClass="rec-section-subtitle"/>
+                    </VBox>
+                    <Button fx:id="refreshTopRatedButton" text="🔄 Refresh" onAction="#loadTopRatedRecommendations"
+                            styleClass="rec-btn-mini"/>
+                </HBox>
+
+                <!-- Section Body -->
+                <StackPane minHeight="180.0">
+                    <FlowPane fx:id="topRatedContainer" hgap="16.0" vgap="16.0" styleClass="rec-flow-container"/>
+
+                    <VBox fx:id="topRatedLoadingBox" alignment="CENTER" spacing="10.0" styleClass="rec-state-box" visible="false" managed="false">
+                        <ProgressIndicator styleClass="rec-spinner" prefWidth="40.0" prefHeight="40.0"/>
+                        <Label text="Retrieving highest rated properties..." styleClass="rec-state-text"/>
+                    </VBox>
+
+                    <VBox fx:id="topRatedErrorBox" alignment="CENTER" spacing="10.0" styleClass="rec-error-box" visible="false" managed="false">
+                        <Label text="⚠️ Unable to load top-rated stays" styleClass="rec-error-title"/>
+                        <Label fx:id="topRatedErrorMessage" text="Network connection error." styleClass="rec-error-subtitle"/>
+                        <Button text="Retry Top-Rated" onAction="#loadTopRatedRecommendations" styleClass="btn-outline"/>
+                    </VBox>
+
+                    <VBox fx:id="topRatedEmptyBox" alignment="CENTER" spacing="8.0" styleClass="rec-state-box" visible="false" managed="false">
+                        <Label text="⭐" styleClass="rec-empty-icon"/>
+                        <Label text="No rated hotels found at this time." styleClass="rec-empty-title"/>
+                    </VBox>
+                </StackPane>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+
+</VBox>

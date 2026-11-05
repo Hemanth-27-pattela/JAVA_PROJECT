@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hotel.desktop.controller.RecommendationCardController"
+      styleClass="rec-card"
+      prefWidth="310.0"
+      minWidth="280.0"
+      maxWidth="330.0"
+      spacing="10.0">
+
+    <padding>
+        <Insets top="12.0" right="14.0" bottom="14.0" left="14.0"/>
+    </padding>
+
+    <!-- Hotel Thumbnail / Image Section -->
+    <StackPane fx:id="imageContainer" prefHeight="150.0" minHeight="150.0" maxHeight="150.0" styleClass="rec-image-box">
+        <!-- Neutral Fallback Placeholder -->
+        <Label fx:id="placeholderImageLabel" text="🏨&#10;No Preview" textAlignment="CENTER" styleClass="hotel-image-placeholder"/>
+        <!-- Asynchronous Image View -->
+        <ImageView fx:id="hotelImageView" fitWidth="282.0" fitHeight="150.0" preserveRatio="true" smooth="true" visible="false"/>
+
+        <!-- Top Badges Overlay -->
+        <HBox alignment="TOP_LEFT" spacing="6.0" StackPane.alignment="TOP_LEFT">
+            <padding>
+                <Insets top="8.0" right="8.0" bottom="8.0" left="8.0"/>
+            </padding>
+            <Label fx:id="categoryBadge" text="✨ RECOMMENDED" styleClass="rec-category-badge"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="scoreBadge" text="95% Match" styleClass="rec-score-badge"/>
+        </HBox>
+    </StackPane>
+
+    <!-- Hotel Title & Stars -->
+    <VBox spacing="4.0">
+        <HBox alignment="CENTER_LEFT" spacing="6.0">
+            <Label fx:id="hotelNameLabel" text="Grand Palace Hotel" styleClass="rec-card-name" wrapText="true" HBox.hgrow="ALWAYS"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="starRatingLabel" text="★★★★★" styleClass="hotel-card-stars"/>
+        </HBox>
+        <Label fx:id="locationLabel" text="📍 London, United Kingdom" styleClass="rec-card-location"/>
+        <Label fx:id="ratingReviewsLabel" text="★ 4.8 / 5.0 • 120 reviews" styleClass="rec-card-reviews"/>
+    </VBox>
+
+    <!-- Type and Facility Badges -->
+    <FlowPane fx:id="tagsContainer" hgap="6.0" vgap="6.0" prefWrapLength="280.0"/>
+
+    <!-- Price Section -->
+    <HBox alignment="CENTER_LEFT" spacing="6.0">
+        <Label fx:id="priceLabel" text="£185" styleClass="rec-card-price"/>
+        <Label text="/ night" styleClass="rec-card-price-unit"/>
+    </HBox>
+
+    <!-- Grounded Recommendation Explanation Box -->
+    <VBox fx:id="primaryReasonBox" spacing="6.0" styleClass="rec-explanation-box">
+        <padding>
+            <Insets top="8.0" right="10.0" bottom="8.0" left="10.0"/>
+        </padding>
+        <HBox alignment="TOP_LEFT" spacing="6.0">
+            <Label text="💡" styleClass="rec-bulb-icon"/>
+            <Label fx:id="primaryReasonLabel" text="Top popular choice booked 15 times with 4.5/5 rating"
+                   wrapText="true" styleClass="rec-reason-text" HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <!-- Toggle for Details & Features -->
+        <Button fx:id="toggleDetailsButton" text="Why this stay? ▾" styleClass="rec-details-toggle"/>
+
+        <!-- Expandable Details Container -->
+        <VBox fx:id="detailsBox" spacing="8.0" visible="false" managed="false" styleClass="rec-expanded-details">
+            <padding>
+                <Insets top="6.0" right="4.0" bottom="4.0" left="4.0"/>
+            </padding>
+            <VBox fx:id="supportingReasonsBox" spacing="4.0"/>
+            <FlowPane fx:id="featuresContainer" hgap="4.0" vgap="4.0" prefWrapLength="270.0"/>
+        </VBox>
+    </VBox>
+
+    <!-- Action Button -->
+    <Button fx:id="viewDetailsButton" text="View Details &amp; Book →" maxWidth="Infinity" styleClass="btn-primary, rec-view-button"/>
+
+</VBox>
+

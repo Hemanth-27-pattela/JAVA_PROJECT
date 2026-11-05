@@ -74,6 +74,12 @@ public class SecurityConfig {
                 // Public Review Endpoints
                 .requestMatchers(HttpMethod.GET, "/api/reviews/hotel/**").permitAll()
 
+                // Recommendation Endpoints
+                .requestMatchers(HttpMethod.GET, "/api/recommendations/popular").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/recommendations/top-rated").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/recommendations/similar/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/recommendations/personalized").hasRole("USER")
+
                 // Documentation
                 .requestMatchers("/api-docs/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 

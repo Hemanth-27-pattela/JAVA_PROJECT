@@ -2,6 +2,7 @@ package com.hotel.booking.services.recommendation;
 
 import com.hotel.booking.entities.Booking;
 import com.hotel.booking.entities.Hotel;
+import com.hotel.booking.entities.embeddables.UserPreferences;
 import com.hotel.booking.entities.enums.BookingStatus;
 
 import java.math.BigDecimal;
@@ -117,6 +118,58 @@ public class UserStayProfile {
 
         double avgSpend = validCount > 0 ? (totalSpend / validCount) : 0.0;
         return new UserStayProfile(cities, countries, types, avgSpend, validCount);
+    }
+
+    /**
+     * Builds a travel profile combining the user's booking history and explicit preferences.
+     */
+    public static UserStayProfile fromBookingsAndPreferences(Collection<Booking> bookings, UserPreferences preferences) {
+        UserStayProfile profile = fromBookings(bookings);
+        if (preferences == null) {
+            return profile;
+        }
+
+        Set<String> mergedCities = new HashSet<>(profile.getBookedCities());
+        Set<String> mergedCountries = new HashSet<>(profile.getBookedCountries());
+        Set<String> mergedTypes = new HashSet<>(profile.getBookedHotelTypes());
+
+        if (preferences.getPreferredDestinations() != null) {
+            for (String dest : preferences.getPreferredDestinations()) {
+                if (dest != null && !dest.isBlank()) {
+                    mergedCities.add(dest.trim());
+                }
+            }
+        }
+
+        if (preferences.getPreferredHotelTypes() != null) {
+            for (String type : preferences.getPreferredHotelTypes()) {
+                if (type != null && !type.isBlank()) {
+                    mergedTypes.add(type.trim());
+                }
+            }
+        }
+
+        double spend = profile.getAverageNightlySpend();
+        if (spend <= 0.0 && preferences.getBudgetRange() != null) {
+            BigDecimal min = preferences.getBudgetRange().getMin();
+            BigDecimal max = preferences.getBudgetRange().getMax();
+            if (max != null && max.compareTo(BigDecimal.ZERO) > 0) {
+                if (min != null && min.compareTo(BigDecimal.ZERO) > 0) {
+                    spend = (min.doubleValue() + max.doubleValue()) / 2.0;
+                } else {
+                    spend = max.doubleValue();
+                }
+            } else if (min != null && min.compareTo(BigDecimal.ZERO) > 0) {
+                spend = min.doubleValue();
+            }
+        }
+
+        int stayCount = profile.getValidStayCount();
+        if (stayCount == 0 && (!mergedCities.isEmpty() || !mergedTypes.isEmpty() || spend > 0.0)) {
+            stayCount = 1;
+        }
+
+        return new UserStayProfile(mergedCities, mergedCountries, mergedTypes, spend, stayCount);
     }
 
     public boolean hasHistory() {

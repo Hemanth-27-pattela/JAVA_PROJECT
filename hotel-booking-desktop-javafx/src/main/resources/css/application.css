@@ -1230,4 +1230,302 @@
     -fx-opacity: 0.45;
 }
 
+/* =============================================================
+ * Phase 9.7 Stage D: Recommendation Dashboard & Card Styles
+ * ============================================================= */
+
+.dashboard-root {
+    -fx-background-color: #f8fafc;
+}
+
+.rec-hero-card {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.03), 8, 0, 0, 2);
+}
+
+.rec-hero-icon {
+    -fx-font-size: 26px;
+}
+
+.rec-hero-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #0f172a;
+}
+
+.rec-hero-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+    -fx-line-spacing: 2px;
+}
+
+.rec-dashboard-content {
+    -fx-background-color: transparent;
+}
+
+.rec-section-container {
+    -fx-background-color: transparent;
+}
+
+.rec-section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0f172a;
+}
+
+.rec-section-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748b;
+}
+
+.rec-pill-badge {
+    -fx-background-color: #eff6ff;
+    -fx-text-fill: #1d4ed8;
+    -fx-border-color: #bfdbfe;
+    -fx-border-radius: 9999px;
+    -fx-background-radius: 9999px;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-padding: 2px 8px;
+}
+
+.rec-pill-badge-popular {
+    -fx-background-color: #fff7ed;
+    -fx-text-fill: #c2410c;
+    -fx-border-color: #fed7aa;
+    -fx-border-radius: 9999px;
+    -fx-background-radius: 9999px;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-padding: 2px 8px;
+}
+
+.rec-pill-badge-top-rated {
+    -fx-background-color: #f0fdf4;
+    -fx-text-fill: #15803d;
+    -fx-border-color: #bbf7d0;
+    -fx-border-radius: 9999px;
+    -fx-background-radius: 9999px;
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-padding: 2px 8px;
+}
+
+.rec-btn-mini {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #475569;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.rec-btn-mini:hover {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #0f172a;
+}
+
+.rec-divider {
+    -fx-background-color: #e2e8f0;
+    -fx-opacity: 0.8;
+}
+
+.rec-state-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 32px 20px;
+}
+
+.rec-state-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+    -fx-font-weight: 500;
+}
+
+.rec-empty-icon {
+    -fx-font-size: 28px;
+}
+
+.rec-empty-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #475569;
+}
+
+.rec-empty-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #94a3b8;
+}
+
+.rec-error-box {
+    -fx-background-color: #fef2f2;
+    -fx-border-color: #fecaca;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 24px 20px;
+}
+
+.rec-error-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #b91c1c;
+}
+
+.rec-error-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #dc2626;
+}
+
+/* -------------------------------------------------------------
+ * Recommendation Card Styling
+ * ------------------------------------------------------------- */
+.rec-card {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.04), 8, 0, 0, 2);
+}
+
+.rec-card:hover {
+    -fx-border-color: #cbd5e1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.09), 12, 0, 0, 4);
+}
+
+.rec-image-box {
+    -fx-background-color: #f1f5f9;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-border-color: #e2e8f0;
+}
+
+.rec-category-badge {
+    -fx-font-size: 9px;
+    -fx-font-weight: 800;
+    -fx-padding: 3px 7px;
+    -fx-background-radius: 4px;
+    -fx-text-fill: #ffffff;
+}
+
+.rec-badge-personalized {
+    -fx-background-color: #1d4ed8;
+}
+
+.rec-badge-popular {
+    -fx-background-color: #ea580c;
+}
+
+.rec-badge-top-rated {
+    -fx-background-color: #059669;
+}
+
+.rec-badge-similar {
+    -fx-background-color: #7c3aed;
+}
+
+.rec-score-badge {
+    -fx-background-color: rgba(15, 23, 42, 0.85);
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+    -fx-padding: 3px 6px;
+    -fx-background-radius: 4px;
+}
+
+.rec-card-name {
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0f172a;
+}
+
+.rec-card-location {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748b;
+    -fx-font-weight: 500;
+}
+
+.rec-card-reviews {
+    -fx-font-size: 11px;
+    -fx-text-fill: #475569;
+}
+
+.rec-card-price {
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #0f172a;
+}
+
+.rec-card-price-unit {
+    -fx-font-size: 11px;
+    -fx-text-fill: #64748b;
+}
+
+/* Grounded Explanation Box */
+.rec-explanation-box {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+.rec-bulb-icon {
+    -fx-font-size: 12px;
+}
+
+.rec-reason-text {
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #1e3a8a;
+    -fx-line-spacing: 2px;
+}
+
+.rec-details-toggle {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #2563eb;
+    -fx-font-size: 10px;
+    -fx-font-weight: 600;
+    -fx-padding: 2px 0;
+    -fx-cursor: hand;
+}
+
+.rec-details-toggle:hover {
+    -fx-underline: true;
+}
+
+.rec-expanded-details {
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1px 0 0 0;
+}
+
+.rec-sub-reason-text {
+    -fx-font-size: 10px;
+    -fx-text-fill: #475569;
+    -fx-line-spacing: 1px;
+}
+
+.rec-feature-pill {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #334155;
+    -fx-font-size: 9px;
+    -fx-font-weight: 600;
+    -fx-padding: 2px 6px;
+    -fx-background-radius: 3px;
+}
+
+.rec-view-button {
+    -fx-pref-height: 34px;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+
 
